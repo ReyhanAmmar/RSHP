@@ -228,9 +228,9 @@
   <div class="navbar-right">
     <div class="user-info">
       <div class="user-avatar">👤</div>
-      <span>{{ Auth::user()->name ?? 'Admin' }}</span>
+      <span>{{ session('name') ?? 'Admin' }}</span>
     </div>
-    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:inline;">
       @csrf
       <button type="submit" class="btn-logout">Logout</button>
     </form>
@@ -257,10 +257,29 @@
       <div class="menu-icon">🐾</div>
       <h3>Jenis Hewan</h3>
     </a>
-    <a href="admin.ras-hewan.index" class="menu-card">
+    <a href="{{ route('admin.ras-hewan.index')}}" classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Ras Hewan</h3>
     </a>
-    <a></a>
+    <a href="{{ route('')}}" classS="menu-card">
+      <div class="menu-icon">🧬</div>
+      <h3>Data Pemilik</h3>
+    </a>
+    <a href="{{ route('')}}" classS="menu-card">
+      <div class="menu-icon">🧬</div>
+      <h3>Data Pet</h3>
+    </a>
+    <a href="{{ route('')}}" classS="menu-card">
+      <div class="menu-icon">🧬</div>
+      <h3>Data Kategori</h3>
+    </a>
+    <a href="{{ route('')}}" classS="menu-card">
+      <div class="menu-icon">🧬</div>
+      <h3>Data Kategori Klinis</h3>
+    </a>
+    <a href="{{ route('')}}" classS="menu-card">
+      <div class="menu-icon">🧬</div>
+      <h3>Data Kode Tindakan Terapi</h3>
+    </a>
 </body>
 </html>

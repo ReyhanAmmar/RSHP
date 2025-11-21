@@ -331,7 +331,7 @@
         <div class="content-card">
             <div class="card-header">
                 <h2>Daftar User</h2>
-                <a href="{{ route('admin.users.tambahuser') }}" class="btn btn-primary">➕ Tambah User</a>
+                <a href="{{ route('admin.data-user.create') }}" class="btn btn-primary">➕ Tambah User</a>
             </div>
 
             @if(session('success'))
@@ -350,7 +350,6 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -369,6 +368,7 @@
                                                 'Dokter' => 'badge-success',
                                                 'Perawat' => 'badge-info',
                                                 'Resepsionis' => 'badge-warning',
+                                                'Pemilik' => 'badge-primary',
                                                 default => 'badge-primary',
                                             };
                                         @endphp
@@ -378,16 +378,9 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($user->userRole && $user->userRole->status == 1)
-                                        <span class="badge badge-success">Aktif</span>
-                                    @else
-                                        <span class="badge badge-danger">Nonaktif</span>
-                                    @endif
-                                </td>
-                                <td>
                                     <div class="action-buttons">
-                                        <a href="{{ route('admin.users.edit', $user->iduser) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
-                                        <a href="{{ route('admin.users.resetpassword', $user->iduser) }}" class="btn btn-primary btn-sm">🔑 Reset</a>
+                                        <a href="{{ route('admin.data-user.edit', $user->iduser) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
+                                        <a href="{{ route('admin.data-user.resetpassword', $user->iduser) }}" class="btn btn-primary btn-sm">🔑 Reset</a>
                                     </div>
                                 </td>
                             </tr>

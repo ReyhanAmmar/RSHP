@@ -139,7 +139,7 @@
   <a href="/home">Home</a>
   <a href="/layanan">Layanan</a>
   <a href="/kontak">Kontak</a>
-  <a href="/login">Login</a>
+  <a href="{{ route('auth.login') }}">Login</a>
 </nav>
 
 <!-- Banner -->

@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function roleuser()
     {
-        return $this->hasOne(roleuser::class, 'iduser', 'iduser');
+        return $this->hasMany(roleuser::class, 'iduser', 'iduser');
     }
 
     public function pemilik()

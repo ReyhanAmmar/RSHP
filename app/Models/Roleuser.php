@@ -16,6 +16,8 @@ class Roleuser extends Model
         'status',
     ];
 
+    public $timestamps = false;
+
     public function user()
     {
         return $this->belongsTo(User::class, 'iduser', 'iduser');
