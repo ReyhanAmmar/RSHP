@@ -261,23 +261,23 @@
       <div class="menu-icon">🧬</div>
       <h3>Ras Hewan</h3>
     </a>
-    <a href="{{ route('')}}" classS="menu-card">
+    <a classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Pemilik</h3>
     </a>
-    <a href="{{ route('')}}" classS="menu-card">
+    <a classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Pet</h3>
     </a>
-    <a href="{{ route('')}}" classS="menu-card">
+    <a classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kategori</h3>
     </a>
-    <a href="{{ route('')}}" classS="menu-card">
+    <a classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kategori Klinis</h3>
     </a>
-    <a href="{{ route('')}}" classS="menu-card">
+    <a classS="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kode Tindakan Terapi</h3>
     </a>

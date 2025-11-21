@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -104,6 +104,8 @@ class LoginController extends Controller
             case '5':
                 return redirect()->route('dashboard.pemilik')->with('success', 'Login berhasil.');
         }
+
+        return redirect('/')->with('error', 'Role user tidak ditemukan.');  
     }
     public function logout(Request $request)
     {
@@ -111,6 +113,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success', 'Logout berhasil.');
+        return redirect('/')->with('success', 'Logout berhasil.');
     }
 }

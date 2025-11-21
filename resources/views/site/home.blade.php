@@ -136,10 +136,23 @@
 
 <!-- Nav atas -->
 <nav class="nav-atas">
-  <a href="/home">Home</a>
-  <a href="/layanan">Layanan</a>
-  <a href="/kontak">Kontak</a>
-  <a href="{{ route('auth.login') }}">Login</a>
+  <a href="{{ route('site.home') }}">Home</a>
+  <a href="{{ route('layanan') }}">Layanan</a>
+  <a href="{{ route('kontak') }}">Kontak</a>
+
+  @guest
+      <a href="{{ route('login') }}">Login</a>
+  
+  @else
+      <a href="{{ route('logout') }}" 
+         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+         Logout
+      </a>
+      
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+      </form>
+  @endguest
 </nav>
 
 <!-- Banner -->

@@ -8,15 +8,15 @@ class Roleuser extends Model
 {
     protected $table = 'role_user';
 
-    protected $primaryKey = 'idroleuser';
+    protected $primaryKey = 'idrole_user';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'iduser',
         'idrole',
         'status',
     ];
-
-    public $timestamps = false;
 
     public function user()
     {

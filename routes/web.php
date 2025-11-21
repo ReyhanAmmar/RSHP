@@ -7,6 +7,8 @@ use App\Http\Controllers\Site\ContController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ManajemenRoleController;
+use App\Http\Controllers\Admin\JenisHewanController;
 
 use App\Http\Controllers\resepsionis\DashboardResepsionisController;
 
@@ -29,11 +31,19 @@ Route::middleware('isAdministrator')->group(function () {
     Route::get('/users/{iduser}/reset-password', [UserController::class, 'resetPassword'])->name('admin.data-user.resetpassword');
     Route::delete('/users/{iduser}', [UserController::class, 'destroy'])->name('admin.data-user.destroy');
 
-    Route::get('/admin/manajemen-role', [UserController::class, 'index'])->name('admin.manajemen-role.index');
+    Route::get('/admin/manajemen-role', [ManajemenRoleController::class, 'index'])->name('admin.manajemen-role.index');
+    Route::get('/create', [ManajemenRoleController::class, 'create'])->name('admin.manajemen-role.create');
+    Route::post('/store', [ManajemenRoleController::class, 'store'])->name('admin.manajemen-role.store');
+    Route::get('/{idrole}/edit', [ManajemenRoleController::class, 'edit'])->name('admin.manajemen-role.edit');
+    Route::put('/{idrole}', [ManajemenRoleController::class, 'update'])->name('admin.manajemen-role.update');
+    Route::delete('/{idrole}', [ManajemenRoleController::class, 'destroy'])->name('admin.manajemen-role.destroy');
 
-
-    Route::get('/admin/jenis-hewan', [UserController::class, 'index'])->name('admin.jenis-hewan.index');
-
+    Route::get('/admin/jenis-hewan', [JenisHewanController::class, 'index'])->name('admin.jenis-hewan.index');
+    Route::get('/admin/jenis-hewan/create', [JenisHewanController::class, 'create'])->name('admin.jenis-hewan.create');
+    Route::post('/admin/jenis-hewan/store', [JenisHewanController::class, 'store'])->name('admin.jenis-hewan.store');
+    Route::get('/{idjenis_hewan}/edit', [JenisHewanController::class, 'edit'])->name('admin.jenis-hewan.edit');
+    Route::put('/{idjenis_hewan}', [JenisHewanController::class, 'update'])->name('admin.jenis-hewan.update');
+    Route::delete('/{idjenis_hewan}', [JenisHewanController::class, 'destroy'])->name('admin.jenis-hewan.destroy');
 
     Route::get('/admin/ras-hewan', [UserController::class, 'index'])->name('admin.ras-hewan.index');
 });

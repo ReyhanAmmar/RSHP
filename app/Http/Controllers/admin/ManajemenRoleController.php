@@ -3,63 +3,77 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\RoleUser;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\RoleUser;
-use Illuminate\Http\Request;
 
 class ManajemenRoleController extends Controller
 {
     public function index()
     {
-        $users = User::with(['roleuser.role'])->get();
-
+        $users = User::with(['roleuser.role'])->whereHas('roleuser')->get();
+        $roleUsers = RoleUser::with(['user', 'role'])->get();
         return view('admin.manajemen-role.index', compact('users'));
     }
 
-    public function edit($iduser)
+    public function create()
     {
-        $user = User::with(['roleuser.role'])->findOrFail($iduser);
+        $users = User::all();
         $roles = Role::all();
-
-        return view('admin.manajemen-role.edit', compact('user', 'roles'));
+        return view('admin.manajemen-role.create', compact('users', 'roles'));
     }
 
-    public function update(Request $request, $iduser)
+    public function store(Request $request)
     {
         $request->validate([
-            'roles' => 'required|array',
+            'iduser' => 'required|exists:user,iduser',
+            'idrole' => 'required|exists:role,idrole',
         ]);
 
-        $user = User::findOrFail($iduser);
+        $exists = RoleUser::where('iduser', $request->iduser)
+                          ->where('idrole', $request->idrole)
+                          ->exists();
 
-        RoleUser::where('iduser', $user->iduser)->delete();
-
-        foreach ($request->roles as $roleId) {
-            RoleUser::create([
-                'iduser' => $user->iduser,
-                'idrole' => $roleId,
-                'status' => 1, 
-            ]);
+        if ($exists) {
+            return redirect()->back()->with('error', 'User tersebut sudah memiliki role ini.');
         }
 
-        return redirect()->route('admin.manajemen-role.index')->with('success', 'Role user berhasil diperbarui.');
+        RoleUser::create([
+            'iduser' => $request->iduser,
+            'idrole' => $request->idrole,
+            'status' => 1 
+        ]);
+
+        return redirect()->route('admin.manajemen-role.index')->with('success', 'Role berhasil ditambahkan ke user.');
     }
 
-    public function nonaktifkan($id)
+    public function edit($idrole_user)
     {
-        $roleUser = RoleUser::findOrFail($id);
-        $roleUser->update(['status' => 0]);
-
-        return back()->with('success', 'Role berhasil dinonaktifkan.');
+        $roleUser = RoleUser::with(['user', 'role'])->findOrFail($idrole_user);
+        return view('admin.manajemen-role.edit', compact('roleUser'));
     }
 
-
-    public function aktifkan($id)
+    public function update(Request $request, $idrole_user)
     {
-        $roleUser = RoleUser::findOrFail($id);
-        $roleUser->update(['status' => 1]);
+        $roleUser = RoleUser::findOrFail($idrole_user);
 
-        return back()->with('success', 'Role berhasil diaktifkan kembali.');
+        $request->validate([
+            'status' => 'required|in:0,1',
+        ]);
+
+        $roleUser->update([
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.manajemen-role.index')->with('success', 'Status role user berhasil diperbarui.');
+    }
+
+    public function destroy($idrole_user)
+    {
+        $roleUser = RoleUser::findOrFail($idrole_user);
+        $roleUser->delete();
+
+        return redirect()->route('admin.manajemen-role.index')->with('success', 'Role user berhasil dihapus.');
     }
 }

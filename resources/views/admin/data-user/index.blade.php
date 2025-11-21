@@ -360,22 +360,22 @@
                                 <td>{{ $user->nama }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>
-                                    @if($user->userRole && $user->userRole->role)
-                                        @php
-                                            $roleName = $user->userRole->role->nama_role;
-                                            $badgeClass = match($roleName) {
-                                                'Administrator' => 'badge-danger',
-                                                'Dokter' => 'badge-success',
-                                                'Perawat' => 'badge-info',
-                                                'Resepsionis' => 'badge-warning',
-                                                'Pemilik' => 'badge-primary',
-                                                default => 'badge-primary',
-                                            };
-                                        @endphp
-                                        <span class="badge {{ $badgeClass }}">{{ $roleName }}</span>
-                                    @else
-                                        <span class="badge badge-danger">Tidak ada role</span>
-                                    @endif
+                                    @php
+                                        $dataRoleUser = $user->roleuser->first(); 
+                                        
+                                        $roleName = ($dataRoleUser && $dataRoleUser->role) ? $dataRoleUser->role->nama_role : 'Tidak ada role';
+
+                                        $badgeClass = match($roleName) {
+                                            'Administrator' => 'badge-danger',
+                                            'Dokter' => 'badge-success',
+                                            'Perawat' => 'badge-info',
+                                            'Resepsionis' => 'badge-warning',
+                                            'Pemilik' => 'badge-primary',
+                                            default => 'badge-secondary',
+                                        };
+                                    @endphp
+                                    
+                                    <span class="badge {{ $badgeClass }}">{{ $roleName }}</span>
                                 </td>
                                 <td>
                                     <div class="action-buttons">

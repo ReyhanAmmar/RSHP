@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['roleUser.role'])->get(); 
+        $users = User::with(['roleuser.role'])->get(); 
         return view('admin.data-user.index', compact('users'));
     }
 
@@ -27,14 +27,21 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|string|email|max:100|unique:user,email', 
+            'email' => 'required|string|email|max:100|unique:user,email',
             'password' => 'required|string|min:6',
+            'role_id' => 'required|exists:role,idrole',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'nama' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        RoleUser::create([
+            'iduser' => $user->iduser,
+            'idrole' => $request->role_id,
+            'status' => 1
         ]);
 
         return redirect()->route('admin.data-user.index')->with('success', 'User berhasil ditambahkan.');
@@ -54,20 +61,20 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:user,email,'.$iduser.',iduser',
-            'idrole' => 'required|exists:role,idrole', // Pastikan input name di form edit adalah 'idrole'
+            'role_id' => 'required|exists:role,idrole', 
             'status' => 'nullable|in:0,1',
         ]);
 
         $user->update([
-            'name' => $request->name,
+            'nama' => $request->name, 
             'email' => $request->email,
         ]);
 
         RoleUser::updateOrCreate(
             ['iduser' => $iduser],
             [
-                'idrole' => $request->idrole,
-                'status' => $request->status ?? 1 
+                'idrole' => $request->role_id, 
+                'status' => $request->status ?? 1
             ]
         );
 
