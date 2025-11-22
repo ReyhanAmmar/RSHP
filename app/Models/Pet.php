@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pet extends Model
 {
-    protected $table = 'kuliah_wf_2025_pet';
+    protected $table = 'pet';
     protected $primaryKey = 'idpet';
     public $timestamps = false;
     protected $fillable = [
@@ -17,5 +17,15 @@ class Pet extends Model
     public function pemilik()
     {
         return $this->belongsTo(Pemilik::class, 'idpemilik', 'idpemilik');
+    }
+
+    public function rasHewan()
+    {
+        return $this->belongsTo(RasHewan::class, 'idras_hewan', 'idras_hewan');
+    }
+    
+    public function jenisHewan()
+    {
+        return $this->hasOneThrough(JenisHewan::class, RasHewan::class, 'idras_hewan', 'idjenis_hewan', 'idras_hewan', 'idjenis_hewan');
     }
 }

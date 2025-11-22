@@ -25,7 +25,7 @@ class isDokter
         if ($userRole == 2) {
 
             return $next($request);
-    } else {
+        } else {
             return back()->with('error', 'Anda tidak memiliki izin untuk akses ke halaman ini.');
         }
     }

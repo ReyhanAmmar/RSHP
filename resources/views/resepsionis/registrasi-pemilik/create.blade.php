@@ -2,84 +2,75 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrasi Pemilik</title>
+    <title>Registrasi Pemilik Baru</title>
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+    <style>
+        .section-title {
+            font-size: 18px; font-weight: bold; color: #333;
+            border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 15px; margin-top: 20px;
+        }
+        .btn-primary { background-color: #007bff; border-color: #007bff; color: white; }
+        .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: white; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Registrasi Pemilik</h1>
 
-    <nav class="navbar">
-    <div class="navbar-left">
-        <img src="/aset/logo-rshp.jpg" alt="Logo RSHP Unair">
-        <h1>Dashboard Resepsionis</h1>
-        </div>
-    <div class="navbar-right">
-        <div class="user-info">
-        <div class="user-avatar">👤</div>
-        <span>{{ Auth::user()->name ?? 'Resepsionis' }}</span>
-        </div>
-        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-        @csrf
-        <button type="submit" class="btn-logout">Logout</button>
+        @if(session('success'))
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('resepsionis.registrasi-pemilik.store') }}" method="POST">
+            @csrf
+            
+            <div class="section-title">1. Data Akun (Login)</div>
+            
+            <div>
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" value="{{ old('nama') }}" placeholder="Nama Sesuai KTP" required>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1;">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="email@contoh.com" required>
+                </div>
+                <div style="flex: 1;">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Minimal 6 karakter" required>
+                </div>
+            </div>
+
+            <div class="section-title">2. Data Kontak</div>
+            
+            <div>
+                <label>Nomor WhatsApp</label>
+                <input type="number" name="no_wa" value="{{ old('no_wa') }}" placeholder="08xxxxxxxxxx" required>
+            </div>
+
+            <div>
+                <label>Alamat Domisili</label>
+                <textarea name="alamat" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Alamat lengkap..." required>{{ old('alamat') }}</textarea>
+            </div>
+
+            <div class="btn-group" style="margin-top: 30px;">
+                <a href="{{ route('resepsionis.dashboard') }}" class="btn btn-secondary">Kembali ke Dashboard</a>
+                <button type="submit" class="btn btn-primary">Simpan Data Pemilik</button>
+            </div>
         </form>
     </div>
-    </nav>
-
-    <h2>Form Registrasi Pemilik</h2>
-
-    @if ($errors->any())
-        <div>
-            <strong>Terjadi kesalahan:</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>- {{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <form action="{{ route('resepsionis.registrasi-pemilik.store') }}" method="POST">
-        @csrf
-
-        <div>
-            <label for="nama_pemilik">Nama Pemilik:</label><br>
-            <input type="text" name="nama_pemilik" id="nama_pemilik" value="{{ old('nama_pemilik') }}" required>
-        </div>
-        <br>
-
-        <div>
-            <label for="alamat">Alamat:</label><br>
-            <textarea name="alamat" id="alamat" rows="3" required>{{ old('alamat') }}</textarea>
-        </div>
-        <br>
-
-        <div>
-            <label for="no_telp">Nomor Telepon:</label><br>
-            <input type="text" name="no_telp" id="no_telp" value="{{ old('no_telp') }}" required>
-        </div>
-        <br>
-
-        <div>
-            <label for="iduser">User:</label><br>
-            <select name="iduser" id="iduser" required>
-                <option value="">-- Pilih User --</option>
-                @foreach ($users as $user)
-                    <option value="{{ $user->iduser }}" {{ old('iduser') == $user->iduser ? 'selected' : '' }}>
-                        {{ $user->name }} ({{ $user->email }})
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <br>
-
-        <button type="submit">Daftarkan Pemilik</button>
-        <a href="{{ route('admin.resepsionis-dashboard') }}">Kembali</a>
-    </form>
-
 </body>
 </html>

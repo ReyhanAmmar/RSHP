@@ -7,26 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class RekamMedis extends Model
 {
     protected $table = 'rekam_medis';
-
     protected $primaryKey = 'idrekam_medis';
-
     public $timestamps = true;
+
     protected $fillable = [
-        'idrekam_medis',
-        'created_at',
         'anamnesa',
-        'temuan_klinik',
+        'temuan_klinis',
         'diagnosa',
         'idpet',
         'dokter_pemeriksa',
+        'idreservasi_dokter' 
     ];
 
-    public function tindakan()
+    public function pet()
     {
-        return $this->belongsToMany( KodeTindakanTerapi::class,
-            'kuliah_wf_2025_detail_rekam_medis',
-            'idrekam_medis',
-            'idkode_tindakan_terapi'
-        )->withPivot('iddetail_rekam_medis', 'detail');
+        return $this->belongsTo(Pet::class, 'idpet', 'idpet');
+    }
+
+    public function detailRekamMedis()
+    {
+        return $this->hasMany(DetailRekamMedis::class, 'idrekam_medis', 'idrekam_medis');
     }
 }

@@ -94,19 +94,19 @@ class LoginController extends Controller
 
         switch ($userRole) {
             case '1':
-                return redirect()->route('dashboard.admin')->with('success', 'Login berhasil.');
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil.');
             case '2':
-                return redirect()->route('dashboard.dokter')->with('success', 'Login berhasil.');
+                return redirect()->route('dokter.dashboard')->with('success', 'Login berhasil.');
             case '3':
-                return redirect()->route('dashboard.perawat')->with('success', 'Login berhasil.');
+                return redirect()->route('perawat.dashboard')->with('success', 'Login berhasil.');
             case '4':
                 return redirect()->route('resepsionis.dashboard')->with('success', 'Login berhasil.');
             case '5':
-                return redirect()->route('dashboard.pemilik')->with('success', 'Login berhasil.');
+                return redirect()->route('pemilik.dashboard')->with('success', 'Login berhasil.');
         }
-
         return redirect('/')->with('error', 'Role user tidak ditemukan.');  
     }
+
     public function logout(Request $request)
     {
         Auth::logout();

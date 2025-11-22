@@ -249,14 +249,13 @@
       <div class="menu-icon">👤</div>
       <h3>Registrasi Pemilik</h3>
     </a>
-    <a href="{{ route('resepsionis.registrasi-pet.index') }}" class="menu-card">
+    <a href="{{ route('resepsionis.registrasi-pet.create') }}" class="menu-card">
       <div class="menu-icon">🐾</div>
-      <h3>Registrasi Hewan</h3>
+      <h3>Registrasi Pet</h3>
     </a>
     <a href="{{ route('resepsionis.temu-dokter.index') }}" class="menu-card">
       <div class="menu-icon">👩🏻‍⚕️</div>
       <h3>Temu Dokter</h3>
-    </a>
     </a>
 </body>
 </html>

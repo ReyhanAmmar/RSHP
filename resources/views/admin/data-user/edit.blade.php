@@ -24,8 +24,12 @@
             @csrf
             @method('PUT')
 
+            @php
+                $currentRoleUser = $user->roleuser->first(); 
+            @endphp
+
             <div>
-                <label>Nama Lengkap</label>
+                <label>Nama</label>
                 <input type="text" name="name" value="{{ old('name', $user->nama) }}" required>
             </div>
 
@@ -35,16 +39,12 @@
             </div>
 
             <div>
-                <label>Jabatan / Role</label>
+                <label>Role</label>
                 <select name="role_id" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
                     <option value="">-- Pilih Jabatan --</option>
                     @foreach ($roles as $role)
-                        {{-- Logika untuk memilih role yang sedang aktif --}}
-                        @php
-                            $currentRole = $user->roleuser->first();
-                            $selected = ($currentRole && $currentRole->idrole == $role->idrole) ? 'selected' : '';
-                        @endphp
-                        <option value="{{ $role->idrole }}" {{ $selected }}>
+                        <option value="{{ $role->idrole }}" 
+                            {{ ($currentRoleUser && $currentRoleUser->idrole == $role->idrole) ? 'selected' : '' }}>
                             {{ $role->nama_role }}
                         </option>
                     @endforeach
@@ -55,10 +55,10 @@
                 <label>Status Akun</label>
                 <select name="status" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
                     @php
-                         $currentStatus = $user->roleuser->first()->status ?? 1;
+                        $status = $currentRoleUser ? $currentRoleUser->status : 1;
                     @endphp
-                    <option value="1" {{ $currentStatus == 1 ? 'selected' : '' }}>Aktif</option>
-                    <option value="0" {{ $currentStatus == 0 ? 'selected' : '' }}>Non-Aktif</option>
+                    <option value="1" {{ $status == 1 ? 'selected' : '' }}>Aktif</option>
+                    <option value="0" {{ $status == 0 ? 'selected' : '' }}>Non-Aktif</option>
                 </select>
             </div>
 

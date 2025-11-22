@@ -319,7 +319,7 @@
     <h1>Dashboard Admin</h1>
     </div>
   <div class="navbar-right">
-    <a href="{{ route('dashboard.admin') }}">Home</a>
+    <a href="{{ route('admin.dashboard') }}">Home</a>
     </div>
     <form action="{{ route('logout') }}" method="POST" style="display: inline;">
       @csrf

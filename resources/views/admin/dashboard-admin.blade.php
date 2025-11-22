@@ -257,27 +257,27 @@
       <div class="menu-icon">🐾</div>
       <h3>Jenis Hewan</h3>
     </a>
-    <a href="{{ route('admin.ras-hewan.index')}}" classS="menu-card">
+    <a href="{{ route('admin.ras-hewan.index')}}" class="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Ras Hewan</h3>
     </a>
-    <a classS="menu-card">
-      <div class="menu-icon">🧬</div>
+    <a href="{{ route('admin.data-pemilik.index')}}" class="menu-card">
+      <div class="menu-icon">👩‍💼</div>
       <h3>Data Pemilik</h3>
     </a>
-    <a classS="menu-card">
-      <div class="menu-icon">🧬</div>
+    <a href="{{ route('admin.data-pet.index')}}" class="menu-card">
+      <div class="menu-icon">🐈🛋️</div>
       <h3>Data Pet</h3>
     </a>
-    <a classS="menu-card">
+    <a href="{{ route('admin.kategori.index') }}" class="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kategori</h3>
     </a>
-    <a classS="menu-card">
+    <a href="{{ route('admin.kategori-klinis.index') }}" class="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kategori Klinis</h3>
     </a>
-    <a classS="menu-card">
+    <a href="{{ route('admin.tindakan.index') }}" class="menu-card">
       <div class="menu-icon">🧬</div>
       <h3>Data Kode Tindakan Terapi</h3>
     </a>
