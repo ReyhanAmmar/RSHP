@@ -1,40 +1,40 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Ras Hewan</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Ras Hewan</h1>
-
+@extends('layouts.argon')
+@section('title', 'Edit Ras Hewan')
+@section('content')
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header pb-0"><h6 class="mb-0">Edit Ras Hewan</h6></div>
+      <div class="card-body">
         <form action="{{ route('admin.ras-hewan.update', $rasHewan->idras_hewan) }}" method="POST">
             @csrf @method('PUT')
-            
-            <div>
-                <label>Nama Ras</label>
-                <input type="text" name="nama_ras" value="{{ old('nama_ras', $rasHewan->nama_ras) }}" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Jenis Hewan</label>
+                        <select class="form-control" name="idjenis_hewan" required>
+                            @foreach($jenisHewan as $j)
+                                <option value="{{ $j->idjenis_hewan }}" {{ $rasHewan->idjenis_hewan == $j->idjenis_hewan ? 'selected' : '' }}>
+                                    {{ $j->nama_jenis_hewan }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Nama Ras</label>
+                        <input class="form-control" type="text" name="nama_ras" value="{{ $rasHewan->nama_ras }}" required>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <label>Jenis Hewan</label>
-                <select name="idjenis_hewan" required style="width: 100%; padding: 10px; margin-top: 5px;">
-                    <option value="">-- Pilih Jenis Hewan --</option>
-                    @foreach($jenisHewan as $jenis)
-                        <option value="{{ $jenis->idjenis_hewan }}" 
-                            {{ $rasHewan->idjenis_hewan == $jenis->idjenis_hewan ? 'selected' : '' }}>
-                            {{ $jenis->nama_jenis_hewan }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="btn-group">
-                <a href="{{ route('admin.ras-hewan.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Update</button>
+            <div class="text-end">
+                <a href="{{ route('admin.ras-hewan.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
+                <button type="submit" class="btn btn-primary btn-sm">Update</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

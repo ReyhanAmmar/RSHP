@@ -1,32 +1,42 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Pemilik - Admin</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Data Pemilik</h1>
-        @if($errors->any()) <div style="color:red; margin-bottom:15px;"><ul>@foreach($errors->all() as $e)<li>{{$e}}</li>@endforeach</ul></div> @endif
-
+@extends('layouts.argon')
+@section('title', 'Edit Pemilik')
+@section('content')
+<div class="row">
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-header pb-0"><h6 class="mb-0">Edit Pemilik</h6></div>
+      <div class="card-body">
         <form action="{{ route('admin.data-pemilik.update', $pemilik->idpemilik) }}" method="POST">
             @csrf @method('PUT')
-            
-            <h3>Data Akun</h3>
-            <div><label>Nama Lengkap</label><input type="text" name="nama" value="{{ $pemilik->user->nama }}" required></div>
-            <div><label>Email</label><input type="email" name="email" value="{{ $pemilik->user->email }}" required></div>
-            <div><label>Password Baru (Opsional)</label><input type="password" name="password"></div>
-
-            <h3 style="margin-top:20px;">Data Kontak</h3>
-            <div><label>No WhatsApp</label><input type="number" name="no_wa" value="{{ $pemilik->no_wa }}" required></div>
-            <div><label>Alamat</label><textarea name="alamat" rows="3" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:10px;" required>{{ $pemilik->alamat }}</textarea></div>
-
-            <div class="btn-group">
-                <a href="{{ route('admin.data-pemilik.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Update</button>
+            <p class="text-uppercase text-sm font-weight-bolder text-primary">Data Akun</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Nama Lengkap</label><input class="form-control" type="text" name="nama" value="{{ $pemilik->user->nama }}" required></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Email</label><input class="form-control" type="email" name="email" value="{{ $pemilik->user->email }}" required></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group"><label class="form-control-label">Password Baru (Opsional)</label><input class="form-control" type="password" name="password"></div>
+                </div>
+            </div>
+            <hr>
+            <p class="text-uppercase text-sm font-weight-bolder text-primary">Data Kontak</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">No WhatsApp</label><input class="form-control" type="number" name="no_wa" value="{{ $pemilik->no_wa }}" required></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Alamat</label><input class="form-control" type="text" name="alamat" value="{{ $pemilik->alamat }}" required></div>
+                </div>
+            </div>
+            <div class="text-end">
+                <a href="{{ route('admin.data-pemilik.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
+                <button type="submit" class="btn btn-primary btn-sm">Update</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

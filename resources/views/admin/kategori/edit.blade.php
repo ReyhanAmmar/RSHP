@@ -1,23 +1,41 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <title>Edit Kategori</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Kategori</h1>
+@extends('layouts.argon')
+
+@section('title', 'Edit Kategori')
+
+@section('content')
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header pb-0">
+        <div class="d-flex align-items-center">
+          <p class="mb-0 font-weight-bold">Edit Kategori</p>
+        </div>
+      </div>
+      <div class="card-body">
         <form action="{{ route('admin.kategori.update', $kategori->idkategori) }}" method="POST">
-            @csrf @method('PUT')
-            <div>
-                <label>Nama Kategori</label>
-                <input type="text" name="nama_kategori" value="{{ $kategori->nama_kategori }}" required>
+            @csrf
+            @method('PUT')
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="form-control-label">Nama Kategori</label>
+                        <input class="form-control @error('nama_kategori') is-invalid @enderror" type="text" name="nama_kategori" value="{{ old('nama_kategori', $kategori->nama_kategori) }}" required>
+                        
+                        @error('nama_kategori')
+                            <span class="text-danger text-xs">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
             </div>
-            <div class="btn-group">
-                <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Update</button>
+
+            <div class="text-end mt-3">
+                <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary btn-sm">Batal</a>
+                <button type="submit" class="btn btn-primary btn-sm">Update</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

@@ -1,57 +1,55 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah User - Admin</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Tambah User Baru</h1>
-
-        @if ($errors->any())
-            <div style="color: red; margin-bottom: 15px;">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
+@extends('layouts.argon')
+@section('title', 'Tambah User')
+@section('content')
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header pb-0">
+        <div class="d-flex align-items-center">
+          <p class="mb-0 font-weight-bold">Tambah User Baru</p>
+        </div>
+      </div>
+      <div class="card-body">
         <form action="{{ route('admin.data-user.store') }}" method="POST">
             @csrf
-            <div>
-                <label>Nama Lengkap</label>
-                <input type="text" name="name" value="{{ old('name') }}" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Nama Lengkap</label>
+                        <input class="form-control" type="text" name="name" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Email</label>
+                        <input class="form-control" type="email" name="email" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Password</label>
+                        <input class="form-control" type="password" name="password" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Role (Jabatan)</label>
+                        <select class="form-control" name="role_id" required>
+                            <option value="">-- Pilih Role --</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->idrole }}">{{ $role->nama_role }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" required>
-            </div>
-
-            <div>
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-
-            <div>
-                <label>Role</label>
-                <select name="role_id" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
-                    <option value="">-- Pilih Jabatan --</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->idrole }}">{{ $role->nama_role }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="btn-group">
-                <a href="{{ route('admin.data-user.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+            <div class="text-end mt-3">
+                <a href="{{ route('admin.data-user.index') }}" class="btn btn-secondary btn-sm">Batal</a>
+                <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

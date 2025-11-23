@@ -1,23 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <title>Tambah Kategori</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Tambah Kategori</h1>
-        <form action="{{ route('admin.kategori.store') }}" method="POST">
-            @csrf
-            <div>
-                <label>Nama Kategori</label>
-                <input type="text" name="nama_kategori" required placeholder="Contoh: Obat Keras">
-            </div>
-            <div class="btn-group">
-                <a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+@extends('layouts.argon')
+@section('title', 'Tambah Kategori')
+@section('content')
+<div class="row"><div class="col-md-6"><div class="card"><div class="card-body">
+    <h6 class="mb-3">Tambah Kategori</h6>
+    <form action="{{ route('admin.kategori.store') }}" method="POST">@csrf
+        <div class="form-group"><label class="form-control-label">Nama Kategori</label><input class="form-control" type="text" name="nama_kategori" required></div>
+        <div class="text-end"><a href="{{ route('admin.kategori.index') }}" class="btn btn-secondary btn-sm">Kembali</a><button class="btn btn-primary btn-sm">Simpan</button></div>
+    </form>
+</div></div></div></div>
+@endsection

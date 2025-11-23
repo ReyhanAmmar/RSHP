@@ -1,32 +1,42 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Tambah Pemilik - Admin</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Tambah Pemilik Baru</h1>
-        @if($errors->any()) <div style="color:red; margin-bottom:15px;"><ul>@foreach($errors->all() as $e)<li>{{$e}}</li>@endforeach</ul></div> @endif
-
+@extends('layouts.argon')
+@section('title', 'Tambah Pemilik')
+@section('content')
+<div class="row">
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-header pb-0"><h6 class="mb-0">Tambah Pemilik Baru</h6></div>
+      <div class="card-body">
         <form action="{{ route('admin.data-pemilik.store') }}" method="POST">
             @csrf
-            
-            <h3>Data Akun</h3>
-            <div><label>Nama Lengkap</label><input type="text" name="nama" required></div>
-            <div><label>Email</label><input type="email" name="email" required></div>
-            <div><label>Password</label><input type="password" name="password" required></div>
-
-            <h3 style="margin-top:20px;">Data Kontak</h3>
-            <div><label>No WhatsApp</label><input type="number" name="no_wa" required></div>
-            <div><label>Alamat</label><textarea name="alamat" rows="3" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:10px;" required></textarea></div>
-
-            <div class="btn-group">
-                <a href="{{ route('admin.data-pemilik.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+            <p class="text-uppercase text-sm font-weight-bolder text-primary">Data Akun</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Nama Lengkap</label><input class="form-control" type="text" name="nama" required></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Email</label><input class="form-control" type="email" name="email" required></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group"><label class="form-control-label">Password</label><input class="form-control" type="password" name="password" required></div>
+                </div>
+            </div>
+            <hr>
+            <p class="text-uppercase text-sm font-weight-bolder text-primary">Data Kontak</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">No WhatsApp</label><input class="form-control" type="number" name="no_wa" required></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group"><label class="form-control-label">Alamat</label><input class="form-control" type="text" name="alamat" required></div>
+                </div>
+            </div>
+            <div class="text-end">
+                <a href="{{ route('admin.data-pemilik.index') }}" class="btn btn-secondary btn-sm">Kembali</a>
+                <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

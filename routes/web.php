@@ -28,6 +28,8 @@ use App\Http\Controllers\Perawat\RekamMedisController;
 use App\Http\Controllers\Dokter\DashboardDokterController;
 use App\Http\Controllers\Dokter\DokterController;
 
+use App\Http\Controllers\Pemilik\DashboardPemilikController;
+
 Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('cek.koneksi');
 
 Route::get('/', [SiteController::class, 'index'])->name('site.home');
@@ -105,7 +107,7 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
 });
 
 Route::middleware('isDokter')->prefix('dokter')->name('dokter.')->group(function () {
-    Route::get('/dokter.dashboard-dokter', [DashboardDokterController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardDokterController::class, 'index'])->name('dashboard');
 
     Route::get('/rekam-medis', [DokterController::class, 'index'])->name('rekam-medis.index');
     Route::get('/rekam-medis/{id}', [DokterController::class, 'show'])->name('rekam-medis.show');
@@ -135,6 +137,15 @@ Route::middleware('isResepsionis')->prefix('resepsionis')->name('resepsionis.')-
     Route::get('/temu-dokter/create', [TemuDokterController::class, 'create'])->name('temu-dokter.create');
     Route::post('/temu-dokter/store', [TemuDokterController::class, 'store'])->name('temu-dokter.store');
     Route::put('/temu-dokter/{id}/update-status', [TemuDokterController::class, 'updateStatus'])->name('temu-dokter.update-status');
+});
+
+Route::middleware('isPemilik')->prefix('pemilik')->name('pemilik.')->group(function () {
+    Route::get('/dashboard-pemilik', [DashboardPemilikController::class, 'index'])->name('dashboard');
+    
+    Route::get('/pets', [DashboardPemilikController::class, 'pets'])->name('pets');
+    Route::get('/reservasi', [DashboardPemilikController::class, 'reservasi'])->name('reservasi');
+    Route::get('/rekam-medis', [DashboardPemilikController::class, 'rekamMedis'])->name('rekam-medis');
+    Route::get('/rekam-medis/{id}', [DashboardPemilikController::class, 'showRekamMedis'])->name('rekam-medis.show');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

@@ -11,9 +11,10 @@ use Exception;
 class RasHewanController extends Controller
 {
     public function index() {
-        $rasHewan = RasHewan::with('jenisHewan')->orderBy('idras_hewan', 'asc')->get();
-        return view('admin.ras-hewan.index', compact('rasHewan'));
-    }
+    $jenisHewan = JenisHewan::with('rasHewan')->orderBy('idjenis_hewan', 'asc')->get();
+    
+    return view('admin.ras-hewan.index', compact('jenisHewan'));
+}
 
     public function create() {
         $jenisHewan = JenisHewan::all();

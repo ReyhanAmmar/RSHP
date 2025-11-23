@@ -1,285 +1,178 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Dashboard Admin RSHP Unair">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin - RSHP Unair</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+@extends('layouts.argon')
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
+@section('title', 'Dashboard Admin')
 
-    .navbar {
-      background: rgb(2, 3, 129);
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .navbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .navbar-left img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: white;
-      object-fit: cover;
-    }
-
-    .navbar h1 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .navbar-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      background: orange;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .btn-logout {
-      padding: 8px 20px;
-      background-color: #dc3545;
-      color: white; border: none; border-radius: 6px;
-      cursor: pointer; text-decoration: none; display: inline-block;
-      font-size: 14px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 40px auto 0;
-      padding: 0 20px;
-    }
-
-    .welcome-card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
-
-    .welcome-card h2 {
-      color: rgb(2, 3, 129);
-      margin-bottom: 10px;
-    }
-
-    .welcome-card p {
-      color: #666;
-      line-height: 1.6;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .stat-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-    }
-
-    .stat-icon.blue {
-      background: #e3f2fd;
-    }
-
-    .stat-icon.orange {
-      background: #fff3e0;
-    }
-
-    .stat-icon.green {
-      background: #e8f5e9;
-    }
-
-    .stat-icon.purple {
-      background: #f3e5f5;
-    }
-
-    .stat-content h3 {
-      font-size: 32px;
-      color: rgb(2, 3, 129);
-      margin-bottom: 5px;
-    }
-
-    .stat-content p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .menu-card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-align: center;
-      text-decoration: none;
-      color: #333;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .menu-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-
-    .menu-icon {
-      font-size: 48px;
-      margin-bottom: 15px;
-    }
-
-    .menu-card h3 {
-      color: rgb(2, 3, 129);
-      margin-bottom: 10px;
-      font-size: 18px;
-    }
-
-    .menu-card p {
-      color: #666;
-      font-size: 13px;
-    }
-
-    .alert {
-      padding: 15px 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .alert-success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-
-<!-- Navbar -->
-<nav class="navbar">
-  <div class="navbar-left">
-    <img src="/aset/logo-rshp.jpg" alt="Logo RSHP Unair">
-    <h1>Dashboard Admin</h1>
+@section('content')
+<div class="row">
+    <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Selamat Datang</p>
+                <h5 class="font-weight-bolder">
+                  {{ Auth::user()->nama ?? 'Admin' }}
+                </h5>
+                <p class="mb-0">
+                  Pantau statistik Rumah Sakit Hewan secara real-time hari ini.
+                </p>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
+                <i class="ni ni-shop text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  <div class="navbar-right">
-    <div class="user-info">
-      <div class="user-avatar">👤</div>
-      <span>{{ session('name') ?? 'Admin' }}</span>
+</div>
+
+<div class="row mt-4">
+    
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total User</p>
+                <h5 class="font-weight-bolder">
+                  {{ $totalUser }}
+                </h5>
+                <p class="mb-0 text-sm">
+                  <span class="text-success font-weight-bolder">Akun</span> terdaftar
+                </p>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:inline;">
-      @csrf
-      <button type="submit" class="btn-logout">Logout</button>
-    </form>
-  </div>
-</nav>
+    
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Dokter Aktif</p>
+                <h5 class="font-weight-bolder">
+                  {{ $totalDokter }}
+                </h5>
+                <p class="mb-0 text-sm">
+                  <span class="text-success font-weight-bolder">Personil</span> siap
+                </p>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                <i class="ni ni-ambulance text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="container">
-    <div class="welcome-card">
-      <h2>Selamat Datang di Dashboard Admin!</h2>
-      <p>Kelola sistem Rumah Sakit Hewan Pendidikan Universitas Airlangga dengan mudah dan efisien.</p>
-  </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pasien</p>
+                <h5 class="font-weight-bolder">
+                  {{ $totalPet }}
+                </h5>
+                <p class="mb-0 text-sm">
+                  <span class="text-primary font-weight-bolder">Ekor</span> hewan
+                </p>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                <i class="fas fa-paw text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Menu Grid -->
-  <div class="menu-grid">
-    <a href="{{ route('admin.data-user.index') }}" class="menu-card">
-      <div class="menu-icon">👤</div>
-      <h3>Data User</h3>
-    </a>
-    <a href="{{ route('admin.manajemen-role.index') }}" class="menu-card">
-      <div class="menu-icon">👥</div>
-      <h3>Manajemen Role</h3>
-    </a>
-    <a href="{{ route('admin.jenis-hewan.index') }}" class="menu-card">
-      <div class="menu-icon">🐾</div>
-      <h3>Jenis Hewan</h3>
-    </a>
-    <a href="{{ route('admin.ras-hewan.index')}}" class="menu-card">
-      <div class="menu-icon">🧬</div>
-      <h3>Ras Hewan</h3>
-    </a>
-    <a href="{{ route('admin.data-pemilik.index')}}" class="menu-card">
-      <div class="menu-icon">👩‍💼</div>
-      <h3>Data Pemilik</h3>
-    </a>
-    <a href="{{ route('admin.data-pet.index')}}" class="menu-card">
-      <div class="menu-icon">🐈🛋️</div>
-      <h3>Data Pet</h3>
-    </a>
-    <a href="{{ route('admin.kategori.index') }}" class="menu-card">
-      <div class="menu-icon">🧬</div>
-      <h3>Data Kategori</h3>
-    </a>
-    <a href="{{ route('admin.kategori-klinis.index') }}" class="menu-card">
-      <div class="menu-icon">🧬</div>
-      <h3>Data Kategori Klinis</h3>
-    </a>
-    <a href="{{ route('admin.tindakan.index') }}" class="menu-card">
-      <div class="menu-icon">🧬</div>
-      <h3>Data Kode Tindakan Terapi</h3>
-    </a>
-</body>
-</html>
+    <div class="col-xl-3 col-sm-6">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-uppercase font-weight-bold">Antrian Hari Ini</p>
+                <h5 class="font-weight-bolder">
+                  {{ $kunjunganHariIni }}
+                </h5>
+                <p class="mb-0 text-sm">
+                    @if($kunjunganHariIni > 0)
+                        <span class="text-danger font-weight-bolder">Sedang berlangsung</span>
+                    @else
+                        <span class="text-secondary">Belum ada</span>
+                    @endif
+                </p>
+              </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
+                <i class="ni ni-calendar-grid-58 text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-7 mb-lg-0 mb-4">
+      <div class="card z-index-2 h-100">
+        <div class="card-header pb-0 pt-3 bg-transparent">
+          <h6 class="text-capitalize">Info Sistem</h6>
+          <p class="text-sm mb-0">
+            <i class="fa fa-check text-success"></i>
+            <span class="font-weight-bold">Status Server:</span> Online
+          </p>
+        </div>
+        <div class="card-body p-3">
+          <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
+            <div class="chart">
+              <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+            </div>
+          </div>
+          <div class="container border-radius-lg">
+             <p class="text-sm">Grafik kunjungan pasien (Dummy Data)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-5">
+      <div class="card card-carousel overflow-hidden h-100 p-0">
+        <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+          <div class="carousel-inner border-radius-lg h-100">
+            <div class="carousel-item h-100 active" style="background-image: url('{{ asset('assets/img/carousel-1.jpg') }}'); background-size: cover;">
+              <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
+                <h5 class="text-white mb-1">RSHP Admin Panel</h5>
+                <p>Kelola data medis dan administrasi dengan lebih efisien.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+@endsection

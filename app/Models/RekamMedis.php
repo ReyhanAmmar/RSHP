@@ -11,12 +11,12 @@ class RekamMedis extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'idreservasi_dokter', // Pastikan kolom ini ada di fillable
+        'idpet',
+        'dokter_pemeriksa',
         'anamnesa',
         'temuan_klinis',
         'diagnosa',
-        'idpet',
-        'dokter_pemeriksa',
-        'idreservasi_dokter' 
     ];
 
     public function pet()
@@ -27,5 +27,10 @@ class RekamMedis extends Model
     public function detailRekamMedis()
     {
         return $this->hasMany(DetailRekamMedis::class, 'idrekam_medis', 'idrekam_medis');
+    }
+
+    public function temuDokter()
+    {
+        return $this->belongsTo(TemuDokter::class, 'idreservasi_dokter', 'idreservasi_dokter');
     }
 }

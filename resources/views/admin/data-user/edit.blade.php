@@ -1,72 +1,62 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User - Admin</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Data User</h1>
-
-        @if ($errors->any())
-        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+@extends('layouts.argon')
+@section('title', 'Edit User')
+@section('content')
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header pb-0">
+        <div class="d-flex align-items-center">
+          <p class="mb-0 font-weight-bold">Edit Data User</p>
         </div>
-        @endif
-
+      </div>
+      <div class="card-body">
         <form action="{{ route('admin.data-user.update', $user->iduser) }}" method="POST">
-            @csrf
-            @method('PUT')
+            @csrf @method('PUT')
+            
+            @php $currentRole = $user->roleuser->first(); @endphp
 
-            @php
-                $currentRoleUser = $user->roleuser->first(); 
-            @endphp
-
-            <div>
-                <label>Nama</label>
-                <input type="text" name="name" value="{{ old('name', $user->nama) }}" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Nama Lengkap</label>
+                        <input class="form-control" type="text" name="name" value="{{ $user->nama }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Email</label>
+                        <input class="form-control" type="email" name="email" value="{{ $user->email }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Role</label>
+                        <select class="form-control" name="role_id" required>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->idrole }}" {{ ($currentRole && $currentRole->idrole == $role->idrole) ? 'selected' : '' }}>
+                                    {{ $role->nama_role }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-control-label">Status Akun</label>
+                        <select class="form-control" name="status">
+                            <option value="1" {{ ($currentRole && $currentRole->status == 1) ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ ($currentRole && $currentRole->status == 0) ? 'selected' : '' }}>Non-Aktif</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <label>Email</label>
-                <input type="email" name="email" value="{{ old('email', $user->email) }}" required>
-            </div>
-
-            <div>
-                <label>Role</label>
-                <select name="role_id" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
-                    <option value="">-- Pilih Jabatan --</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->idrole }}" 
-                            {{ ($currentRoleUser && $currentRoleUser->idrole == $role->idrole) ? 'selected' : '' }}>
-                            {{ $role->nama_role }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <label>Status Akun</label>
-                <select name="status" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
-                    @php
-                        $status = $currentRoleUser ? $currentRoleUser->status : 1;
-                    @endphp
-                    <option value="1" {{ $status == 1 ? 'selected' : '' }}>Aktif</option>
-                    <option value="0" {{ $status == 0 ? 'selected' : '' }}>Non-Aktif</option>
-                </select>
-            </div>
-
-            <div class="btn-group">
-                <a href="{{ route('admin.data-user.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-primary">Update</button>
+            <div class="text-end mt-3">
+                <a href="{{ route('admin.data-user.index') }}" class="btn btn-secondary btn-sm">Batal</a>
+                <button type="submit" class="btn btn-primary btn-sm">Update</button>
             </div>
         </form>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+@endsection

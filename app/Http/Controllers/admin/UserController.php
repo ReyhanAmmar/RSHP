@@ -19,7 +19,8 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::all(); 
+        
         return view('admin.data-user.create', compact('roles'));
     }
 
@@ -49,8 +50,10 @@ class UserController extends Controller
 
     public function edit($iduser)
     {
-        $user = User::with('roleUser')->findOrFail($iduser);
-        $roles = Role::all();
+        $user = User::with('roleuser')->findOrFail($iduser);
+        
+        $roles = Role::all(); 
+        
         return view('admin.data-user.edit', compact('user', 'roles'));
     }
 
@@ -61,19 +64,19 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:user,email,'.$iduser.',iduser',
-            'role_id' => 'required|exists:role,idrole', 
+            'role_id' => 'required|exists:role,idrole',
             'status' => 'nullable|in:0,1',
         ]);
 
         $user->update([
-            'nama' => $request->name, 
+            'nama' => $request->name,
             'email' => $request->email,
         ]);
 
         RoleUser::updateOrCreate(
             ['iduser' => $iduser],
             [
-                'idrole' => $request->role_id, 
+                'idrole' => $request->role_id,
                 'status' => $request->status ?? 1
             ]
         );
@@ -84,7 +87,7 @@ class UserController extends Controller
     public function resetPassword($iduser)
     {
         $user = User::findOrFail($iduser);
-        $defaultPassword = '123456'; 
+        $defaultPassword = '123456';
 
         $user->update([
             'password' => Hash::make($defaultPassword),

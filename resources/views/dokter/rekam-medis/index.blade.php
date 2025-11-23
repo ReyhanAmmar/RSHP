@@ -1,5 +1,3 @@
-{{-- resources/views/dokter/rekam-medis/index.blade.php --}}
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Pasien - Dokter</title>
     <style>
-        /* --- CSS GLOBAL (Konsisten dengan modul lain) --- */
+        /* --- CSS GLOBAL (Konsisten dengan Perawat & Admin) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f6fa; }
 
@@ -38,7 +36,7 @@
 
         .card-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; flex-wrap: wrap; gap: 15px;
+            margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;
         }
         .card-header h2 { color: #333; font-size: 22px; margin: 0; }
 
@@ -64,19 +62,21 @@
 
         /* Data Styling */
         .pet-name { font-weight: bold; font-size: 15px; color: #2d3748; }
-        .owner-info { font-size: 13px; color: #718096; }
-        .date-info { font-size: 14px; color: #4a5568; font-weight: 500; }
-        .diagnosa-text { font-style: italic; color: #555; }
+        .pet-detail { font-size: 12px; color: #718096; display: block; margin-top: 2px; }
+        .date-text { font-weight: 600; color: #4a5568; }
+        .date-sub { font-size: 12px; color: #a0aec0; }
 
-        /* Badges */
-        .badge { padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; color: white; display: inline-block; }
-        .badge-count { background-color: #17a2b8; }
+        .diagnosa-box {
+            background: #f0fff4; border: 1px solid #bbf7d0; color: #166534;
+            padding: 5px 10px; border-radius: 6px; font-size: 13px; display: inline-block;
+            max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
 
         @media (max-width: 768px) {
             .content-card { margin: 15px; padding: 15px; }
             th, td { padding: 10px; }
             .navbar { flex-direction: column; gap: 15px; }
-            .card-header { flex-direction: column; align-items: flex-start; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
     </style>
 </head>
@@ -88,7 +88,7 @@
     <h1>Dashboard Dokter</h1>
   </div>
   <div class="navbar-right">
-    <a href="{{ route('dashboard.dokter') }}">Home</a>
+    <a href="{{ route('dokter.dashboard') }}">Home</a>
     <form action="{{ route('logout') }}" method="POST" style="display: inline;">
       @csrf
       <button type="submit" class="btn-logout">Logout</button>
@@ -99,55 +99,58 @@
 <div class="content-card">
     <div class="card-header">
         <h2>📋 Riwayat Rekam Medis Pasien</h2>
-        <a href="{{ route('dashboard.dokter') }}" class="btn btn-secondary">Kembali ke Dashboard</a>
+        <a href="{{ route('dokter.dashboard') }}" class="btn btn-secondary">Kembali ke Dashboard</a>
     </div>
 
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th width="5%">No</th>
+                    <th width="5%" style="text-align:center;">No</th>
                     <th width="15%">Tanggal Periksa</th>
                     <th width="20%">Identitas Hewan</th>
                     <th width="20%">Pemilik</th>
-                    <th width="30%">Diagnosa Awal</th>
-                    <th width="10%">Aksi</th>
+                    <th width="25%">Diagnosa</th>
+                    <th width="15%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($rekamMedis as $index => $rm)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td style="text-align:center;">{{ $index + 1 }}</td>
+                        
                         <td>
-                            <span class="date-info">
-                                {{ $rm->created_at->format('d M Y') }}
-                            </span><br>
-                            <small style="color:#888;">{{ $rm->created_at->format('H:i') }} WIB</small>
+                            <div class="date-text">{{ $rm->created_at->format('d M Y') }}</div>
+                            <div class="date-sub">{{ $rm->created_at->format('H:i') }} WIB</div>
                         </td>
+                        
                         <td>
                             <div class="pet-name">{{ $rm->pet->nama ?? 'Hewan Dihapus' }}</div>
-                            <small style="color: #718096;">
+                            <span class="pet-detail">
                                 {{ $rm->pet->jenisHewan->nama_jenis_hewan ?? '' }} - 
                                 {{ $rm->pet->rasHewan->nama_ras ?? '' }}
-                            </small>
+                            </span>
                         </td>
+
                         <td>
                             <strong>{{ $rm->pet->pemilik->user->nama ?? 'Tanpa Pemilik' }}</strong>
                         </td>
+
                         <td>
-                            <span class="diagnosa-text">
-                                {{ Str::limit($rm->diagnosa, 60, '...') }}
+                            <span class="diagnosa-box">
+                                {{ Str::limit($rm->diagnosa, 40, '...') }}
                             </span>
                         </td>
+
                         <td>
                             <a href="{{ route('dokter.rekam-medis.show', $rm->idrekam_medis) }}" class="btn btn-primary">
-                                👁️ Detail
+                                Lihat Detail
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" style="text-align:center; padding:40px; color: #888;">
+                        <td colspan="6" style="text-align:center; padding:50px; color: #9ca3af;">
                             <div style="font-size: 40px; margin-bottom: 10px;">📭</div>
                             Belum ada riwayat rekam medis.
                         </td>
