@@ -20,8 +20,28 @@ class DashboardPemilikController extends Controller
 
     public function index()
     {
-        $pemilik = $this->getPemilik();
-        return view('pemilik.dashboard-pemilik', compact('pemilik'));
+        $user = Auth::user();
+        $pemilik = Pemilik::where('iduser', $user->iduser)->first();
+
+        if (!$pemilik) {
+            return view('pemilik.dashboard', [
+                'totalHewan' => 0, 
+                'reservasiAktif' => 0, 
+                'totalPemeriksaan' => 0
+            ]);
+        }
+
+        $totalHewan = Pet::where('idpemilik', $pemilik->idpemilik)->count();
+
+        $petIds = Pet::where('idpemilik', $pemilik->idpemilik)->pluck('idpet');
+        
+        $reservasiAktif = TemuDokter::whereIn('idpet', $petIds)
+                            ->where('status', '0')
+                            ->count();
+
+        $totalPemeriksaan = RekamMedis::whereIn('idpet', $petIds)->count();
+
+        return view('pemilik.dashboard-pemilik', compact('totalHewan', 'reservasiAktif', 'totalPemeriksaan'));
     }
 
     public function pets()

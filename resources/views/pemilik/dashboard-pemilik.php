@@ -1,56 +1,75 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Pemilik</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-    <style>
-        body { background-color: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
-        .navbar { background: rgb(2, 3, 129); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-logout { padding: 8px 20px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; }
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
-        .menu-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: center; text-decoration: none; color: #333; transition: 0.3s; display: block; }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .menu-icon { font-size: 40px; margin-bottom: 15px; }
-    </style>
-</head>
-<body>
-<nav class="navbar">
-    <div style="display:flex; align-items:center; gap:10px;">
-        <img src="/aset/logo-rshp.jpg" width="40" height="40" style="border-radius:50%; background:white;">
-        <h3>Area Pemilik Hewan</h3>
-    </div>
-    <div style="display:flex; align-items:center; gap:15px;">
-        <span>Halo, {{ Auth::user()->nama }}</span>
-        <form action="{{ route('logout') }}" method="POST">@csrf <button class="btn-logout">Logout</button></form>
-    </div>
-</nav>
+@extends('layouts.pemilik')
 
-<div class="container">
-    <div style="background:white; padding:30px; border-radius:12px; border-left:5px solid rgb(2,3,129); margin-bottom:30px;">
-        <h2>Selamat Datang!</h2>
-        <p>Pantau kesehatan hewan kesayangan Anda melalui menu di bawah ini.</p>
+@section('title', 'Dashboard Pemilik')
+
+@section('content')
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 bg-primary text-white">
+                <div class="card-body p-4">
+                    <h2 class="fw-bold">Selamat Datang, {{ Auth::user()->nama }}! 👋</h2>
+                    <p class="mb-0 op-8">Ini adalah panel kontrol untuk mengelola hewan peliharaan Anda.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="menu-grid">
-        <a href="{{ route('pemilik.pets') }}" class="menu-card">
-            <div class="menu-icon">🐈</div>
-            <h3>Daftar Hewan</h3>
-            <p>Lihat data hewan peliharaan Anda</p>
-        </a>
-        <a href="{{ route('pemilik.reservasi') }}" class="menu-card">
-            <div class="menu-icon">📅</div>
-            <h3>Riwayat Reservasi</h3>
-            <p>Jadwal temu dokter</p>
-        </a>
-        <a href="{{ route('pemilik.rekam-medis') }}" class="menu-card">
-            <div class="menu-icon">📋</div>
-            <h3>Rekam Medis</h3>
-            <p>Riwayat kesehatan & diagnosa</p>
-        </a>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-light text-primary rounded-circle p-3 me-3">
+                        <i class="fas fa-paw fa-2x"></i> </div>
+                    <div>
+                        <p class="text-muted mb-0">Total Hewan Peliharaan</p>
+                        <h3 class="fw-bold mb-0">{{ $totalHewan ?? 0 }} Ekor</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mb-3 fw-bold text-dark">Menu Utama</h4>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100 border-start border-4 border-info hover-card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold"><i class="fas fa-cat me-2"></i>Daftar Pet Saya</h5>
+                    <p class="card-text text-muted">Lihat dan kelola data hewan peliharaan yang terdaftar.</p>
+                    <a href="#" class="btn btn-outline-info btn-sm stretched-link">Lihat Daftar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100 border-start border-4 border-warning hover-card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold"><i class="fas fa-calendar-alt me-2"></i>Reservasi</h5>
+                    <p class="card-text text-muted">Cek jadwal reservasi klinik untuk hewan Anda.</p>
+                    <a href="#" class="btn btn-outline-warning btn-sm stretched-link">Lihat Reservasi</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm h-100 border-start border-4 border-danger hover-card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold"><i class="fas fa-file-medical me-2"></i>Rekam Medis</h5>
+                    <p class="card-text text-muted">Riwayat kesehatan dan detail pengobatan hewan.</p>
+                    <a href="#" class="btn btn-outline-danger btn-sm stretched-link">Lihat Detail</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-</body>
-</html>
+
+<style>
+    .hover-card {
+        transition: transform 0.2s;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+@endsection

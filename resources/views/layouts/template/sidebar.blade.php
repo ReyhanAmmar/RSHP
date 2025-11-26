@@ -21,13 +21,14 @@
 
         <li class="nav-item">
             @php
-                // Cek apakah kita sedang berada di salah satu halaman Master Data
                 $isMasterDataActive = request()->routeIs('admin.data-user.*') || 
                                       request()->routeIs('admin.manajemen-role.*') ||
                                       request()->routeIs('admin.jenis-hewan.*') ||
                                       request()->routeIs('admin.ras-hewan.*') ||
                                       request()->routeIs('admin.data-pemilik.*') ||
                                       request()->routeIs('admin.data-pet.*');
+                                      request()->routeIs('admin.data-dokter.*');
+                                      request()->routeIs('admin.data-perawat.*');
             @endphp
 
             <a class="nav-link {{ $isMasterDataActive ? 'active' : '' }}" data-bs-toggle="collapse" href="#masterData" role="button" aria-expanded="{{ $isMasterDataActive ? 'true' : 'false' }}" aria-controls="masterData">
@@ -73,6 +74,17 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.data-pet.*') ? 'active' : '' }}" href="{{ route('admin.data-pet.index') }}">
                             <span class="sidenav-normal"> Data Hewan (Pet) </span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.data-dokter.*') ? 'active' : '' }}" href="{{ route('admin.data-dokter.index') }}">
+                            <span class="sidenav-normal"> Data Dokter </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.data-perawat.*') ? 'active' : '' }}" href="{{ route('admin.data-perawat.index') }}">
+                            <span class="sidenav-normal"> Data Perawat </span>
                         </a>
                     </li>
 
