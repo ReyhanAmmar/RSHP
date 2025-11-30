@@ -18,7 +18,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('perawat.rekam-medis.*') ? 'active' : '' }}" href="{{ route('perawat.rekam-medis.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center"><i class="ni ni-briefcase-24 text-info text-sm opacity-10"></i></div>
-                    <span class="nav-link-text ms-1">Pemeriksaan Pasien</span>
+                    <span class="nav-link-text ms-1">Rekam Medis</span>
                 </a>
             </li>
         </ul>

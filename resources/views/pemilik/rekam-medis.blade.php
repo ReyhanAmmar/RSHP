@@ -18,7 +18,7 @@
     <div class="content-card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2>📋 Riwayat Kesehatan (Rekam Medis)</h2>
-            <a href="{{ route('dashboard.pemilik') }}" class="btn-back">Kembali</a>
+            <a href="{{ route('pemilik.dashboard') }}" class="btn-back">Kembali</a>
         </div>
         <table>
             <thead><tr><th>Tanggal</th><th>Nama Hewan</th><th>Diagnosa</th><th>Aksi</th></tr></thead>

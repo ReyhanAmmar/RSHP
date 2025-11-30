@@ -25,7 +25,6 @@ class TemuDokterController extends Controller
     public function create()
     {
         $pets = Pet::all();
-
         $pemilik = Pemilik::with('user')->get(); 
         
         $dokter = RoleUser::whereHas('role', function ($q) {
@@ -57,7 +56,7 @@ class TemuDokterController extends Controller
             'idrole_user' => $request->idrole_user,
         ]);
 
-        return redirect()->route('resepsionis.temu-dokter.index')
+        return redirect()->route('temu-dokter.index')
                          ->with('success', 'Pendaftaran berhasil! Nomor Antrian: ' . $noUrut);
     }
 
@@ -68,6 +67,6 @@ class TemuDokterController extends Controller
         
         $temuDokter->update(['status' => $request->status]);
 
-        return redirect()->route('resepsionis.temu-dokter.index')->with('success', 'Status berhasil diperbarui.');
+        return redirect()->route('temu-dokter.index')->with('success', 'Status berhasil diperbarui.');
     }
 }

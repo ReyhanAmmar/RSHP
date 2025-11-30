@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+// --- IMPORT CONTROLLER ---
 use App\Http\Controllers\Site\SiteController;
 use App\Http\Controllers\Site\ServController;
 use App\Http\Controllers\Site\ContController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Admin\PetController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\KategoriKlinisController;
 use App\Http\Controllers\Admin\KodeTindakanTerapiController;
+use App\Http\Controllers\Admin\DataDokterController;
+use App\Http\Controllers\Admin\DataPerawatController;
 
 use App\Http\Controllers\Resepsionis\DashboardResepsionisController;
 use App\Http\Controllers\Resepsionis\RegistrasiPemilikController;
@@ -33,19 +36,25 @@ use App\Http\Controllers\Dokter\DokterController;
 use App\Http\Controllers\Pemilik\DashboardPemilikController;
 
 
+// --- ROUTE PUBLIC ---
 Route::get('/', [SiteController::class, 'index'])->name('site.home');
 Route::get('/layanan', [ServController::class, 'index'])->name('layanan');
 Route::get('/kontak', [ContController::class, 'index'])->name('kontak');
 Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('cek.koneksi');
 
 
+// --- AUTHENTICATION ---
 Auth::routes();
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
+// ====================================================
+// 1. ADMINISTRATOR
+// ====================================================
 Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/admin.dashboard-admin', [DashboardAdminController::class, 'index'])->name('dashboard');
 
+    // Master Data User
     Route::prefix('data-user')->name('data-user.')->group(function() {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
@@ -56,6 +65,7 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::get('/{iduser}/reset-password', [UserController::class, 'resetPassword'])->name('resetpassword');
     });
 
+    // Manajemen Role
     Route::prefix('manajemen-role')->name('manajemen-role.')->group(function() {
         Route::get('/', [ManajemenRoleController::class, 'index'])->name('index');
         Route::get('/create', [ManajemenRoleController::class, 'create'])->name('create');
@@ -65,6 +75,7 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::delete('/{idrole}', [ManajemenRoleController::class, 'destroy'])->name('destroy');
     });
 
+    // Master Hewan
     Route::prefix('jenis-hewan')->name('jenis-hewan.')->group(function() {
         Route::get('/', [JenisHewanController::class, 'index'])->name('index');
         Route::get('/create', [JenisHewanController::class, 'create'])->name('create');
@@ -83,6 +94,7 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::delete('/{id}', [RasHewanController::class, 'destroy'])->name('destroy');
     });
 
+    // Master Klien
     Route::prefix('data-pemilik')->name('data-pemilik.')->group(function() {
         Route::get('/', [PemilikController::class, 'index'])->name('index');
         Route::get('/create', [PemilikController::class, 'create'])->name('create');
@@ -101,6 +113,7 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::delete('/{id}', [PetController::class, 'destroy'])->name('destroy');
     });
 
+    // Master Medis
     Route::prefix('kategori')->name('kategori.')->group(function() {
         Route::get('/', [KategoriController::class, 'index'])->name('index');
         Route::get('/create', [KategoriController::class, 'create'])->name('create');
@@ -127,26 +140,44 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::put('/{id}', [KodeTindakanTerapiController::class, 'update'])->name('update');
         Route::delete('/{id}', [KodeTindakanTerapiController::class, 'destroy'])->name('destroy');
     });
+
+        Route::resource('data-dokter', DataDokterController::class);
+        Route::resource('data-perawat', DataPerawatController::class);
 });
 
+// ====================================================
+// 2. RESEPSIONIS
+// ====================================================
+Route::middleware('isResepsionis')->group(function () {
 
-Route::middleware('isResepsionis')->prefix('resepsionis')->group(function () {
-    Route::get('/resepsionis.dashboard-resepsionis', [DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
+    // Bagian A: Dashboard & Registrasi (Pakai nama resepsionis.*)
+    Route::prefix('resepsionis')->name('resepsionis.')->group(function() {
+        
+        // Dashboard -> resepsionis.dashboard
+        Route::get('/dashboard', [DashboardResepsionisController::class, 'index'])->name('dashboard');
+        
+        // Registrasi (Hapus ['as'] agar tidak double) -> resepsionis.registrasi-pemilik.*
+        Route::resource('registrasi-pemilik', RegistrasiPemilikController::class);
+        Route::resource('registrasi-pet', RegistrasiPetController::class);
+    });
 
-    Route::resource('registrasi-pemilik', RegistrasiPemilikController::class, ['as' => 'resepsionis']);
-    Route::resource('registrasi-pet', RegistrasiPetController::class, ['as' => 'resepsionis']);
-    
-    Route::prefix('temu-dokter')->name('temu-dokter.')->group(function() {
+    // Bagian B: Temu Dokter (DIPISAH agar namanya temu-dokter.*)
+    // URL tetap /resepsionis/temu-dokter, tapi Nama Routenya jadi temu-dokter.index
+    Route::prefix('resepsionis/temu-dokter')->name('temu-dokter.')->group(function() {
         Route::get('/', [TemuDokterController::class, 'index'])->name('index');
         Route::get('/create', [TemuDokterController::class, 'create'])->name('create');
         Route::post('/store', [TemuDokterController::class, 'store'])->name('store');
         Route::put('/{id}/update-status', [TemuDokterController::class, 'updateStatus'])->name('update-status');
     });
+
 });
 
 
+// ====================================================
+// 3. PERAWAT
+// ====================================================
 Route::middleware('isPerawat')->prefix('perawat')->name('perawat.')->group(function () {
-    Route::get('/perawat.dashboard-perawat', [DashboardPerawatController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardPerawatController::class, 'index'])->name('dashboard');
     
     Route::prefix('rekam-medis')->name('rekam-medis.')->group(function() {
         Route::get('/', [RekamMedisController::class, 'index'])->name('index');
@@ -161,8 +192,11 @@ Route::middleware('isPerawat')->prefix('perawat')->name('perawat.')->group(funct
 });
 
 
+// ====================================================
+// 4. DOKTER
+// ====================================================
 Route::middleware('isDokter')->prefix('dokter')->name('dokter.')->group(function () {
-    Route::get('/dokter.dashboard-dokter', [DashboardDokterController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardDokterController::class, 'index'])->name('dashboard');
     
     Route::prefix('rekam-medis')->name('rekam-medis.')->group(function() {
         Route::get('/', [DokterController::class, 'index'])->name('index');
@@ -171,8 +205,11 @@ Route::middleware('isDokter')->prefix('dokter')->name('dokter.')->group(function
 });
 
 
+// ====================================================
+// 5. PEMILIK
+// ====================================================
 Route::middleware('isPemilik')->prefix('pemilik')->name('pemilik.')->group(function () {
-    Route::get('/pemilik.dashboard-pemilik', [DashboardPemilikController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardPemilikController::class, 'index'])->name('dashboard');
     
     Route::get('/pets', [DashboardPemilikController::class, 'pets'])->name('pets');
     Route::get('/reservasi', [DashboardPemilikController::class, 'reservasi'])->name('reservasi');

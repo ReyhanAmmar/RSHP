@@ -18,7 +18,7 @@
     <div class="content-card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2>📅 Riwayat Reservasi Temu Dokter</h2>
-            <a href="{{ route('dashboard.pemilik') }}" class="btn-back">Kembali</a>
+            <a href="{{ route('pemilik.dashboard') }}" class="btn-back">Kembali</a>
         </div>
         <table>
             <thead><tr><th>Tanggal</th><th>No Urut</th><th>Hewan</th><th>Dokter</th><th>Status</th></tr></thead>

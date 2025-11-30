@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\TemuDokter;
 use App\Models\RekamMedis;
 use App\Models\DetailRekamMedis;
+use App\Models\Kategori;
+use App\Models\KategoriKlinis;
 use App\Models\KodeTindakanTerapi;
 use App\Models\RoleUser;
 
@@ -60,11 +62,14 @@ class RekamMedisController extends Controller
 
     public function edit($id)
     {
-        $rekamMedis = RekamMedis::with(['pet', 'detailRekamMedis.kodeTindakan'])->findOrFail($id);
+        $rekamMedis = RekamMedis::with(['pet.pemilik.user', 'detailRekamMedis.kodeTindakan', 'temuDokter.roleUser.user'])->findOrFail($id);
+        
+        $kategori = Kategori::all();
+        $kategoriKlinis = KategoriKlinis::all();
         
         $listTindakan = KodeTindakanTerapi::all();
 
-        return view('perawat.rekam-medis.edit', compact('rekamMedis', 'listTindakan'));
+        return view('perawat.rekam-medis.edit', compact('rekamMedis', 'listTindakan', 'kategori', 'kategoriKlinis'));
     }
 
     public function update(Request $request, $id)
