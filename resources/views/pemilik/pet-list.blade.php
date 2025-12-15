@@ -1,11 +1,57 @@
-@extends('layouts.pemilik')
-@section('title', 'Hewan Saya')
+@extends('layouts.contentNavbarLayout')
+
+@section('title', 'Hewan Peliharaan Saya')
+
 @section('content')
-<div class="row"><div class="col-12"><div class="card mb-4"><div class="card-header pb-0"><h6>Hewan Peliharaan</h6></div>
-<div class="card-body px-0 pt-0 pb-2"><div class="table-responsive p-0"><table class="table align-items-center mb-0">
-<thead><tr><th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama</th><th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Jenis</th></tr></thead>
-<tbody>@foreach($pets as $p)<tr>
-    <td><h6 class="mb-0 text-sm px-3">{{ $p->nama }}</h6></td>
-    <td><span class="text-xs font-weight-bold">{{ $p->rasHewan->nama_ras ?? '-' }}</span></td>
-</tr>@endforeach</tbody></table></div></div></div></div></div>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Dashboard /</span> Hewan Saya
+    </h4>
+
+    <div class="row">
+        @forelse($pets as $pet)
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar avatar-xl bg-label-primary rounded-circle mx-auto mb-3">
+                        <i class="bx bx-paw fs-1"></i>
+                    </div>
+                    <h5 class="card-title mb-1">{{ $pet->nama }}</h5>
+                    <p class="text-muted mb-3">{{ $pet->jenisHewan->nama_jenis_hewan ?? 'Hewan' }} - {{ $pet->rasHewan->nama_ras ?? '-' }}</p>
+                    
+                    <div class="d-flex justify-content-around bg-lighter p-2 rounded mb-3">
+                        <div>
+                            <span class="d-block text-muted text-xs">Kelamin</span>
+                            <span class="fw-bold text-dark">
+                                @if($pet->jenis_kelamin == 'Jantan') <i class="bx bx-male-sign text-info"></i> Jantan
+                                @else <i class="bx bx-female-sign text-danger"></i> Betina
+                                @endif
+                            </span>
+                        </div>
+                        <div>
+                            <span class="d-block text-muted text-xs">Umur</span>
+                            <span class="fw-bold text-dark">{{ \Carbon\Carbon::parse($pet->tanggal_lahir)->age }} Thn</span>
+                        </div>
+                        <div>
+                            <span class="d-block text-muted text-xs">Warna</span>
+                            <span class="fw-bold text-dark">{{ $pet->warna }}</span>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('pemilik.rekam-medis') }}" class="btn btn-outline-primary btn-sm w-100">Lihat Riwayat Medis</a>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="col-12">
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <i class="bx bx-info-circle me-2"></i>
+                <div>
+                    Anda belum memiliki data hewan peliharaan yang terdaftar. Silakan hubungi Resepsionis untuk pendaftaran.
+                </div>
+            </div>
+        </div>
+        @endforelse
+    </div>
+</div>
 @endsection

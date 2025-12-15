@@ -1,4 +1,4 @@
-@extends('layouts.argon')
+@extends('layouts.contentNavbarLayout')
 @section('title', 'Kategori Klinis')
 @section('content')
 <div class="row">

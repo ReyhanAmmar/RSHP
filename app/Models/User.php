@@ -6,9 +6,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($model) {
+            if (Auth::check()) {
+                $model->deleted_by = Auth::user()->iduser;
+                $model->save();
+            }
+        });
+    }
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 

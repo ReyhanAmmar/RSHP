@@ -12,10 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class DataDokterController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dokter = Dokter::with('user')->orderBy('id_dokter', 'asc')->get();
-        return view('admin.data-dokter.index', compact('dokter'));
+        $status = $request->get('status', 'aktif');
+
+        $query = Dokter::with('user');
+
+        if ($status === 'non-aktif') {
+            $query->onlyTrashed();
+        } else {
+        }
+
+        $dokters = $query->get();
+
+        return view('admin.data-dokter.index', compact('dokters', 'status'));
     }
 
     public function create()
@@ -81,7 +91,6 @@ class DataDokterController extends Controller
         }
         $user->update($userData);
 
-        // Update Dokter
         $dokter->update([
             'no_hp' => $request->no_hp,
             'alamat' => $request->alamat,
@@ -95,12 +104,21 @@ class DataDokterController extends Controller
     public function destroy($id)
     {
         $dokter = Dokter::findOrFail($id);
-        $iduser = $dokter->iduser;
+        $dokter->deleted_by = auth()->user()->iduser; 
+        $dokter->save();
         
-        RoleUser::where('iduser', $iduser)->delete();
         $dokter->delete();
-        User::destroy($iduser);
 
-        return redirect()->route('admin.data-dokter.index')->with('success', 'Data dokter dihapus.');
+        return redirect()->route('admin.data-dokter.index')->with('success', 'Data Dokter dinonaktifkan.');
+    }
+
+    public function restore($id)
+    {
+        $dokter = Dokter::onlyTrashed()->findOrFail($id);
+        
+        $dokter->restore();
+
+        return redirect()->route('admin.data-dokter.index', ['status' => 'non-aktif'])
+            ->with('success', 'Data Dokter berhasil diaktifkan kembali.');
     }
 }

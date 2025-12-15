@@ -1,40 +1,65 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Rekam Medis</title>
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-    <style>
-        body { background-color: #f5f6fa; font-family: 'Segoe UI', sans-serif; }
-        .content-card { background: white; border-radius: 12px; padding: 30px; margin: 30px auto; max-width: 1000px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background: #f8f9fa; padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6; }
-        td { padding: 15px; border-bottom: 1px solid #dee2e6; }
-        .btn-detail { background: #007bff; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 13px; }
-        .btn-back { background: #6c757d; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; }
-    </style>
-</head>
-<body>
-    <div class="content-card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2>📋 Riwayat Kesehatan (Rekam Medis)</h2>
-            <a href="{{ route('pemilik.dashboard') }}" class="btn-back">Kembali</a>
+@extends('layouts.contentNavbarLayout')
+
+@section('title', 'Rekam Medis Hewan')
+
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Kesehatan /</span> Rekam Medis
+    </h4>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Riwayat Kesehatan Hewan</h5>
         </div>
-        <table>
-            <thead><tr><th>Tanggal</th><th>Nama Hewan</th><th>Diagnosa</th><th>Aksi</th></tr></thead>
-            <tbody>
-                @forelse($rekamMedis as $rm)
-                <tr>
-                    <td>{{ $rm->created_at->format('d M Y') }}</td>
-                    <td>{{ $rm->pet->nama }}</td>
-                    <td>{{ Str::limit($rm->diagnosa, 50) }}</td>
-                    <td><a href="{{ route('pemilik.rekam-medis.show', $rm->idrekam_medis) }}" class="btn-detail">Lihat Detail</a></td>
-                </tr>
-                @empty
-                <tr><td colspan="4" style="text-align:center; padding:30px;">Belum ada data rekam medis.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th>Tanggal Periksa</th>
+                        <th>Nama Hewan</th>
+                        <th>Diagnosa Dokter</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @forelse($rekamMedis as $index => $rm)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $rm->created_at->format('d M Y') }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-xs me-2">
+                                    <span class="avatar-initial rounded-circle bg-label-primary">
+                                        <i class="bx bx-paw"></i>
+                                    </span>
+                                </div>
+                                <strong>{{ $rm->pet->nama }}</strong>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 250px;">
+                                {{ $rm->diagnosa ?? 'Belum ada diagnosa' }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ route('pemilik.rekam-medis.show', $rm->idrekam_medis) }}" class="btn btn-sm btn-info">
+                                <span class="bx bx-search-alt me-1"></span> Detail
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <i class="bx bx-folder-open bx-lg text-secondary mb-2"></i>
+                            <p class="text-muted">Belum ada data rekam medis.</p>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

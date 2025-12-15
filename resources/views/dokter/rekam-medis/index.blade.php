@@ -1,33 +1,79 @@
-@extends('layouts.dokter')
-@section('title', 'Riwayat Pasien')
+@extends('layouts.contentNavbarLayout')
+
+@section('title', 'Pemeriksaan Dokter')
+
 @section('content')
-<div class="row">
-  <div class="col-12">
-    <div class="card mb-4">
-      <div class="card-header pb-0"><h6>Riwayat Rekam Medis</h6></div>
-      <div class="card-body px-0 pt-0 pb-2">
-        <div class="table-responsive p-0">
-          <table class="table align-items-center mb-0">
-            <thead><tr><th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tanggal</th><th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Pasien</th><th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Diagnosa</th><th></th></tr></thead>
-            <tbody>
-              @foreach($rekamMedis as $rm)
-              <tr>
-                <td><span class="text-xs font-weight-bold ms-3">{{ $rm->created_at->format('d M Y') }}</span></td>
-                <td>
-                    <h6 class="mb-0 text-sm">{{ $rm->pet->nama }}</h6>
-                    <p class="text-xs text-secondary mb-0">Owner: {{ $rm->pet->pemilik->user->nama ?? '-' }}</p>
-                </td>
-                <td><span class="text-xs text-secondary">{{ Str::limit($rm->diagnosa, 50) }}</span></td>
-                <td class="align-middle text-end px-4">
-                  <a href="{{ route('dokter.rekam-medis.show', $rm->idrekam_medis) }}" class="btn btn-primary btn-sm">Detail</a>
-                </td>
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Pemeriksaan /</span> Daftar Pasien
+    </h4>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Antrian Pemeriksaan Dokter</h5>
         </div>
-      </div>
+
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th width="5%" class="text-center">No</th>
+                        <th>Tanggal</th>
+                        <th>Nama Hewan</th>
+                        <th>Pemilik</th>
+                        <th>Status</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @forelse($antrian as $index => $item)
+                    <tr>
+                        <td class="text-center">
+                            <span class="badge bg-label-primary rounded-circle p-2">{{ $item->no_urut }}</span>
+                        </td>
+                        <td>
+                            {{-- PERBAIKAN DI SINI: Gunakan waktu_daftar --}}
+                            {{ \Carbon\Carbon::parse($item->waktu_daftar)->format('d M Y') }}
+                        </td>
+                        <td>
+                            <strong>{{ $item->pet->nama }}</strong>
+                            <div class="text-muted text-xs">{{ $item->pet->jenisHewan->nama_jenis_hewan ?? '-' }}</div>
+                        </td>
+                        <td>
+                            {{ $item->pet->pemilik->user->nama ?? '-' }}
+                        </td>
+                        <td>
+                            @if($item->status == '1') 
+                                <span class="badge bg-label-warning">Menunggu Dokter</span>
+                            @elseif($item->status == '2')
+                                <span class="badge bg-label-success">Selesai</span>
+                            @else
+                                <span class="badge bg-label-secondary">Belum Siap</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($item->status == '1')
+                                <a href="{{ route('dokter.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-success">
+                                    <span class="bx bx-stethoscope me-1"></span> Periksa
+                                </a>
+                            @elseif($item->status == '2')
+                                <a href="{{ route('dokter.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-outline-secondary">
+                                    <span class="bx bx-file me-1"></span> Detail
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <div class="text-muted mb-2"><i class="bx bx-check-circle bx-lg"></i></div>
+                            Tidak ada pasien yang menunggu pemeriksaan.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 </div>
 @endsection
