@@ -7,6 +7,13 @@
       <div class="card-header pb-0 d-flex justify-content-between">
         <h6>Daftar Dokter</h6>
         <a href="{{ route('admin.data-dokter.create') }}" class="btn btn-primary btn-sm">Tambah Dokter</a>
+        <form action="{{ route('admin.data-dokter.index') }}" method="GET" class="d-flex gap-2">
+            <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                <option value="aktif" {{ $status == 'aktif' ? 'selected' : '' }}>Data Aktif</option>
+                <option value="non-aktif" {{ $status == 'non-aktif' ? 'selected' : '' }}>Non-Aktif (Sampah)</option>
+            </select>
+            <a href="{{ route('admin.data-dokter.create') }}" class="btn btn-primary btn-sm mb-0">Tambah</a>
+        </form>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         @if(session('success'))

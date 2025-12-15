@@ -117,7 +117,6 @@
       color: gray;
     }
 
-    /* Footer */
     footer {
       background-color: rgb(2, 3, 129);
       color: white;
@@ -134,7 +133,6 @@
 </head>
 <body>
 
-<!-- Nav atas -->
 <nav class="nav-atas">
   <a href="{{ route('site.home') }}">Home</a>
   <a href="{{ route('layanan') }}">Layanan</a>
@@ -155,19 +153,16 @@
   @endguest
 </nav>
 
-<!-- Banner -->
 <div class="banner">
-    <img src="./aset/banner.webp" alt="Rumah Sakit Hewan Pendidikan Unair">
+    <img src="./assets/img/banner.webp" alt="Rumah Sakit Hewan Pendidikan Unair">
 </div>
 
-<!-- Nav bawah -->
 <nav class="nav-bawah">
   <a href="struktur_org.html">Struktur Organisasi</a>
   <a href="#">Layanan Umum</a>
   <a href="#">Visi Misi dan Tujuan</a>
 </nav>
 
-<!-- Dua kolom -->
 <section class="dua-kolom">
   <div>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/rCfvZPECZvE?si=6UU1MSyB2qtCoiME" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
@@ -177,12 +172,11 @@
   </div>
 </section>
 
-<!-- Berita Terkini -->
 <section class="berita">
   <h2>Berita Terkini</h2>
   <div class="berita-wrapper">
     <div class="berita-item">
-      <img src="./aset/berita1.jpg" alt="Program Kerja Sama">
+      <img src="./assets/img/berita1.jpg" alt="Program Kerja Sama">
       <div class="berita-item-content">
         <p class="judul">Program Kerja Sama Rumah Sakit Hewan Pendidikan dengan SMK Negeri Tutur</p>
         <p>Rumah Sakit Hewan Pendidikan menjalin kerja sama dengan SMK Negeri Tutur dalam rangka meningkatkan kompetensi siswa di bidang kesehatan hewan. Acara ini meliputi pelatihan langsung dan observasi lapangan.</p>
@@ -190,7 +184,7 @@
       </div>
     </div>
     <div class="berita-item">
-      <img src="./aset/berita2.jpg" alt="Road To Pet Festival">
+      <img src="./assets/img/berita2.jpg" alt="Road To Pet Festival">
       <div class="berita-item-content">
         <p class="judul">Road To Pet Festival 2023 Vaksin Purevax Gratis</p>
         <p>Dalam rangka memeriahkan Road To Pet Festival, Rumah Sakit Hewan Pendidikan memberikan layanan vaksin Purevax gratis bagi kucing peliharaan warga sekitar. Acara ini berlangsung selama dua hari penuh.</p>
@@ -198,7 +192,7 @@
       </div>
     </div>
     <div class="berita-item">
-      <img src="./aset/berita3.jpg" alt="World Rabies Day">
+      <img src="./assets/img/berita3.jpg" alt="World Rabies Day">
       <div class="berita-item-content">
         <p class="judul">World Rabies Day</p>
         <p>Peringatan Hari Rabies Sedunia diadakan untuk meningkatkan kesadaran masyarakat tentang bahaya rabies dan pentingnya vaksinasi hewan peliharaan.</p>
@@ -208,7 +202,6 @@
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <h3>RUMAH SAKIT HEWAN PENDIDIKAN</h3>
   GEDUNG RS HEWAN PENDIDIKAN<br>
