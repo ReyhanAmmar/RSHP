@@ -4,8 +4,10 @@ namespace App\Http\Controllers\perawat;
 
 use App\Http\Controllers\Controller;
 use App\Models\RekamMedis;
+use App\Models\DetailRekamMedis;
 use App\Models\TemuDokter;
 use App\Models\Dokter;
+use App\Models\KodeTindakanTerapi;
 use App\Models\Pet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,17 +16,21 @@ class RekamMedisController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->get('status', 'aktif');
-        
-        $query = RekamMedis::with(['pet.pemilik.user', 'dokter.user']);
+        // Fetch antrian (TemuDokter) yang masih menunggu atau sedang diproses
+        $antrian = TemuDokter::with([
+            'pet.pemilik.user',
+            'pet.jenisHewan',
+            'roleUser.user'
+        ])->latest('waktu_daftar')->get();
 
-        if ($status === 'non-aktif') {
-            $query->onlyTrashed();
-        }
+        // Fetch rekam medis yang sudah dibuat (history)
+        $rekamMedisHistory = RekamMedis::with([
+            'pet.pemilik.user',
+            'pet.jenisHewan',
+            'dokter.user'
+        ])->latest('created_at')->get();
 
-        $rekamMedis = $query->latest('created_at')->get();
-
-        return view('perawat.rekam-medis.index', compact('rekamMedis', 'status'));
+        return view('perawat.rekam-medis.index', compact('antrian', 'rekamMedisHistory'));
     }
 
     /**
@@ -44,31 +50,31 @@ class RekamMedisController extends Controller
     {
         $request->validate([
             'idpet' => 'required|exists:pet,idpet',
-            'dokter_pemeriksa' => 'required|exists:dokter,id_dokter',
-            'suhu' => 'nullable|numeric',
-            'berat' => 'nullable|numeric',
+            'idreservasi_dokter' => 'required',
             'anamnesa' => 'required|string',
             'temuan_klinis' => 'nullable|string',
-            'idreservasi' => 'required' 
+            'diagnosa' => 'required|string'
         ]);
 
-        DB::transaction(function () use ($request) {
-            RekamMedis::create([
+        $rekamMedis = null;
+        DB::transaction(function () use ($request, &$rekamMedis) {
+            $reservasi = TemuDokter::findOrFail($request->idreservasi_dokter);
+            
+            $rekamMedis = RekamMedis::create([
                 'idpet' => $request->idpet,
-                'dokter_pemeriksa' => $request->dokter_pemeriksa,
-                'suhu' => $request->suhu,
-                'berat' => $request->berat,
+                'idreservasi_dokter' => $request->idreservasi_dokter,
+                'dokter_pemeriksa' => $reservasi->idrole_user,
                 'anamnesa' => $request->anamnesa,
                 'temuan_klinis' => $request->temuan_klinis,
-                'diagnosa' => null, 
+                'diagnosa' => $request->diagnosa,
                 'created_at' => now(),
             ]);
 
-            $reservasi = TemuDokter::findOrFail($request->idreservasi);
-            $reservasi->update(['status' => 'Sedang Diperiksa']);
+            $reservasi->update(['status' => '1']);
         });
 
-        return redirect()->route('perawat.rekam-medis.index')->with('success', 'Rekam Medis berhasil dibuat. Silakan informasikan ke Dokter.');
+        return redirect()->route('perawat.rekam-medis.tindakan', $rekamMedis->idrekam_medis)
+                         ->with('success', 'Rekam Medis berhasil dibuat. Silakan tambahkan tindakan terapi.');
     }
 
     public function edit($id)
@@ -79,25 +85,56 @@ class RekamMedisController extends Controller
         return view('perawat.rekam-medis.edit', compact('rekamMedis', 'dokters'));
     }
 
+    /**
+     * Menampilkan detail Rekam Medis dengan Tindakan Terapi
+     */
+    public function show($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'pet.pemilik.user', 
+            'pet.jenisHewan', 
+            'pet.rasHewan', 
+            'dokter.user',
+            'detailRekamMedis.kodeTindakan'
+        ])->findOrFail($id);
+
+        $tindakan = KodeTindakanTerapi::all();
+
+        return view('perawat.rekam-medis.show', compact('rekamMedis', 'tindakan'));
+    }
+
+    /**
+     * Menampilkan halaman manajemen tindakan terapi untuk rekam medis
+     */
+    public function tindakan($id)
+    {
+        $rekamMedis = RekamMedis::with([
+            'pet.pemilik.user', 
+            'pet.jenisHewan',
+            'detailRekamMedis.kodeTindakan'
+        ])->findOrFail($id);
+
+        $tindakan = KodeTindakanTerapi::all();
+
+        return view('perawat.rekam-medis.tindakan', compact('rekamMedis', 'tindakan'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
-            'dokter_pemeriksa' => 'required',
-            'anamnesa' => 'required',
-            'suhu' => 'nullable|numeric',
-            'berat' => 'nullable|numeric',
+            'anamnesa' => 'required|string',
+            'temuan_klinis' => 'nullable|string',
+            'diagnosa' => 'required|string',
         ]);
 
         $rekamMedis = RekamMedis::findOrFail($id);
         $rekamMedis->update([
-            'dokter_pemeriksa' => $request->dokter_pemeriksa,
             'anamnesa' => $request->anamnesa,
             'temuan_klinis' => $request->temuan_klinis,
-            'suhu' => $request->suhu,
-            'berat' => $request->berat,
+            'diagnosa' => $request->diagnosa,
         ]);
 
-        return redirect()->route('perawat.rekam-medis.index')->with('success', 'Data Rekam Medis diperbarui.');
+        return redirect()->route('perawat.rekam-medis.index')->with('success', 'Data Rekam Medis berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -115,7 +152,37 @@ class RekamMedisController extends Controller
         $rm = RekamMedis::onlyTrashed()->findOrFail($id);
         $rm->restore();
 
-        return redirect()->route('perawat.rekam-medis.index', ['status' => 'non-aktif'])
+        return redirect()->route('perawat.rekam-medis.index', ['status' => 'Non-Aktif'])
             ->with('success', 'Rekam Medis dikembalikan.');
+    }
+
+    /**
+     * Tambah detail tindakan terapi
+     */
+    public function storeDetail(Request $request, $id)
+    {
+        $request->validate([
+            'idkode_tindakan_terapi' => 'required|exists:kode_tindakan_terapi,idkode_tindakan_terapi',
+            'detail' => 'nullable|string'
+        ]);
+
+        DetailRekamMedis::create([
+            'idrekam_medis' => $id,
+            'idkode_tindakan_terapi' => $request->idkode_tindakan_terapi,
+            'detail' => $request->detail,
+        ]);
+
+        return redirect()->back()->with('success', 'Tindakan terapi berhasil ditambahkan.');
+    }
+
+    /**
+     * Hapus detail tindakan terapi
+     */
+    public function destroyDetail($id_detail)
+    {
+        $detail = DetailRekamMedis::findOrFail($id_detail);
+        $detail->delete();
+
+        return redirect()->back()->with('success', 'Tindakan terapi dihapus.');
     }
 }

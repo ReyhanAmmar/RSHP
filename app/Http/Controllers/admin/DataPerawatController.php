@@ -12,9 +12,18 @@ use Illuminate\Support\Facades\DB;
 
 class DataPerawatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $perawat = Perawat::with('user')->orderBy('id_perawat', 'asc')->get();
+        $query = Perawat::with(['user' => function ($q) {
+            $q->withTrashed(); 
+        }]);
+
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $perawat = $query->orderBy('id_perawat', 'asc')->get();
+
         return view('admin.data-perawat.index', compact('perawat'));
     }
 
@@ -58,14 +67,18 @@ class DataPerawatController extends Controller
 
     public function edit($id)
     {
-        $perawat = Perawat::with('user')->findOrFail($id);
+        $perawat = Perawat::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
+
         return view('admin.data-perawat.edit', compact('perawat'));
     }
 
     public function update(Request $request, $id)
     {
         $perawat = Perawat::findOrFail($id);
-        $user = User::findOrFail($perawat->iduser);
+        
+        $user = User::withTrashed()->findOrFail($perawat->iduser);
 
         $request->validate([
             'nama' => 'required|string|max:100',
@@ -98,8 +111,26 @@ class DataPerawatController extends Controller
 
         RoleUser::where('iduser', $iduser)->delete();
         $perawat->delete();
-        User::destroy($iduser);
+        
+        if($user = User::find($iduser)) {
+            $user->delete();
+        }
 
         return redirect()->route('admin.data-perawat.index')->with('success', 'Data perawat dihapus.');
+    }
+
+    public function restore($id)
+    {
+        $perawat = Perawat::withTrashed()->findOrFail($id);
+        $perawat->restore();
+        
+        if ($perawat->iduser) {
+            $user = User::withTrashed()->where('iduser', $perawat->iduser)->first();
+            if($user) {
+                $user->restore();           
+            }
+        }
+
+    return back()->with('success', 'Data perawat & akun berhasil dipulihkan.');
     }
 }

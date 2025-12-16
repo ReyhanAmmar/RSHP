@@ -43,4 +43,9 @@ class Pet extends Model
     {
         return $this->hasOneThrough(JenisHewan::class, RasHewan::class, 'idras_hewan', 'idjenis_hewan', 'idras_hewan', 'idjenis_hewan');
     }
+
+    public function rekamMedis()
+    {
+        return $this->hasMany(RekamMedis::class, 'idpet', 'idpet');
+    }
 }

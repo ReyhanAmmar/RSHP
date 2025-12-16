@@ -4,175 +4,145 @@
 
 @section('content')
 <div class="row">
-    <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Selamat Datang</p>
-                <h5 class="font-weight-bolder">
-                  {{ Auth::user()->nama ?? 'Admin' }}
-                </h5>
-                <p class="mb-0">
-                  Pantau statistik Rumah Sakit Hewan secara real-time hari ini.
-                </p>
-              </div>
+    <div class="col-lg-8 mb-4 order-0">
+        <div class="card">
+            <div class="d-flex align-items-end row">
+                <div class="col-sm-7">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Selamat Datang, {{ Auth::user()->nama ?? 'Admin' }}! 🎉</h5>
+                        <p class="mb-4">
+                            Pantau statistik <span class="fw-bold">Rumah Sakit Hewan</span> secara real-time hari ini.
+                            Cek jadwal dan antrian pasien terbaru.
+                        </p>
+                        <a href="{{ route('profile.index') }}" class="btn btn-sm btn-outline-primary">Lihat Profil</a>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-center text-sm-left">
+                    <div class="card-body pb-0 px-0 px-md-4">
+                        <img src="{{ asset('assets/img/illustrations/man-with-laptop.png') }}" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+                    </div>
+                </div>
             </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                <i class="ni ni-shop text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 order-1">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 col-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-danger"><i class="bx bx-user"></i></span>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                                    <a class="dropdown-item" href="{{ route('admin.data-user.index') }}">View Detail</a>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="fw-semibold d-block mb-1">Total User</span>
+                        <h3 class="card-title mb-2">{{ $totalUser }}</h3>
+                        <small class="text-success fw-semibold"><i class="bx bx-check"></i> Terdaftar</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12 col-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-success"><i class="bx bx-plus-medical"></i></span>
+                            </div>
+                        </div>
+                        <span class="fw-semibold d-block mb-1">Dokter</span>
+                        <h3 class="card-title text-nowrap mb-1">{{ $totalDokter }}</h3>
+                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> Aktif</small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row mt-4">
-    
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total User</p>
-                <h5 class="font-weight-bolder">
-                  {{ $totalUser }}
-                </h5>
-                <p class="mb-0 text-sm">
-                  <span class="text-success font-weight-bolder">Akun</span> terdaftar
-                </p>
-              </div>
+<div class="row">
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded bg-label-warning"><i class="bx bxs-dog"></i></span>
+                    </div>
+                </div>
+                <span class="d-block mb-1">Total Pasien (Hewan)</span>
+                <h3 class="card-title text-nowrap mb-2">{{ $totalPet }}</h3>
+                <small class="text-muted">Ekor hewan terdaftar</small>
             </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                <i class="ni ni-single-02 text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-    
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Dokter Aktif</p>
-                <h5 class="font-weight-bolder">
-                  {{ $totalDokter }}
-                </h5>
-                <p class="mb-0 text-sm">
-                  <span class="text-success font-weight-bolder">Personil</span> siap
-                </p>
-              </div>
-            </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                <i class="ni ni-ambulance text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pasien</p>
-                <h5 class="font-weight-bolder">
-                  {{ $totalPet }}
-                </h5>
-                <p class="mb-0 text-sm">
-                  <span class="text-primary font-weight-bolder">Ekor</span> hewan
-                </p>
-              </div>
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start justify-content-between">
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded bg-label-info"><i class="bx bx-calendar-event"></i></span>
+                    </div>
+                </div>
+                <span class="d-block mb-1">Antrian Hari Ini</span>
+                <h3 class="card-title text-nowrap mb-2">{{ $kunjunganHariIni }}</h3>
+                @if($kunjunganHariIni > 0)
+                    <small class="text-danger fw-semibold"><i class="bx bx-time-five"></i> Sedang berlangsung</small>
+                @else
+                    <small class="text-muted">Belum ada antrian</small>
+                @endif
             </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                <i class="fas fa-paw text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
 
-    <div class="col-xl-3 col-sm-6">
-      <div class="card">
-        <div class="card-body p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-uppercase font-weight-bold">Antrian Hari Ini</p>
-                <h5 class="font-weight-bolder">
-                  {{ $kunjunganHariIni }}
-                </h5>
-                <p class="mb-0 text-sm">
-                    @if($kunjunganHariIni > 0)
-                        <span class="text-danger font-weight-bolder">Sedang berlangsung</span>
-                    @else
-                        <span class="text-secondary">Belum ada</span>
-                    @endif
-                </p>
-              </div>
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                <div class="card-title mb-0">
+                    <h5 class="m-0 me-2">Status Sistem</h5>
+                </div>
             </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
-                <i class="ni ni-calendar-grid-58 text-lg opacity-10" aria-hidden="true"></i>
-              </div>
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex flex-column align-items-center gap-1">
+                        <h2 class="mb-2">Online</h2>
+                        <span>Server Status</span>
+                    </div>
+                    <div id="orderStatisticsChart">
+                        <div class="avatar flex-shrink-0">
+                            <span class="avatar-initial rounded bg-label-success p-4">
+                                <i class="bx bx-server fs-1"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="p-0 m-0">
+                    <li class="d-flex mb-4 pb-1">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-mobile-alt"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                                <h6 class="mb-0">Mobile Friendly</h6>
+                                <small class="text-muted">Responsive Layout</small>
+                            </div>
+                            <div class="user-progress">
+                                <small class="fw-semibold">Yes</small>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-lg-7 mb-lg-0 mb-4">
-      <div class="card z-index-2 h-100">
-        <div class="card-header pb-0 pt-3 bg-transparent">
-          <h6 class="text-capitalize">Info Sistem</h6>
-          <p class="text-sm mb-0">
-            <i class="fa fa-check text-success"></i>
-            <span class="font-weight-bold">Status Server:</span> Online
-          </p>
-        </div>
-        <div class="card-body p-3">
-          <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
-            <div class="chart">
-              <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
-            </div>
-          </div>
-          <div class="container border-radius-lg">
-             <p class="text-sm">Grafik kunjungan pasien (Dummy Data)</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-lg-5">
-      <div class="card card-carousel overflow-hidden h-100 p-0">
-        <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-          <div class="carousel-inner border-radius-lg h-100">
-            <div class="carousel-item h-100 active" style="background-image: url('{{ asset('assets/img/carousel-1.jpg') }}'); background-size: cover;">
-              <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                <h5 class="text-white mb-1">RSHP Admin Panel</h5>
-                <p>Kelola data medis dan administrasi dengan lebih efisien.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 </div>
 @endsection

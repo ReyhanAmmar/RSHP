@@ -10,18 +10,7 @@ class TemuDokter extends Model
 {
     use SoftDeletes;
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::deleting(function ($model) {
-            if (Auth::check()) {
-                $model->deleted_by = Auth::user()->iduser;
-                $model->save();
-            }
-        });
-    }
-
-     protected $table = 'temu_dokter';
+    protected $table = 'temu_dokter';
 
     protected $primaryKey = 'idreservasi_dokter';
 
@@ -35,7 +24,20 @@ class TemuDokter extends Model
         'status',
         'idpet',
         'idrole_user',
+        'deleted_by',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            if (Auth::check()) {
+                $model->deleted_by = Auth::user()->iduser;
+                $model->save();
+            }
+        });
+    }
 
     public function pet()
     {
@@ -43,6 +45,11 @@ class TemuDokter extends Model
     }
 
     public function roleUser()
+    {
+        return $this->belongsTo(RoleUser::class, 'idrole_user', 'idrole_user');
+    }
+
+    public function dokter()
     {
         return $this->belongsTo(RoleUser::class, 'idrole_user', 'idrole_user');
     }

@@ -9,9 +9,17 @@ use Exception;
 
 class KategoriKlinisController extends Controller
 {
-    public function index() {
-        $klinis = KategoriKlinis::all();
-        return view('admin.kategori-klinis.index', compact('klinis'));
+    public function index(Request $request)
+    {
+        $query = KategoriKlinis::query();
+
+        if ($request->get('status') == 'non-aktif') {
+            $query->onlyTrashed();
+        }
+
+        $kategoriKlinis = $query->orderBy('idkategori_klinis', 'asc')->get(); 
+
+        return view('admin.kategori-klinis.index', compact('kategoriKlinis'));
     }
 
     public function create() {
@@ -64,5 +72,11 @@ class KategoriKlinisController extends Controller
 
     protected function formatNama($nama) {
         return trim(ucwords(strtolower($nama)));
+    }
+
+    public function restore($id)
+    {
+        KategoriKlinis::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Kategori klinis berhasil dipulihkan.');
     }
 }

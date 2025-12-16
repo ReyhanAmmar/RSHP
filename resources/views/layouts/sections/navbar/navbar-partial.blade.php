@@ -56,12 +56,10 @@
                 <li>
                     <div class="dropdown-divider my-1"></div>
                 </li>
-                <li>
-                    <a class="dropdown-item" href="javascript:void(0);">
-                        <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">My Profile</span>
-                    </a>
-                </li>
+                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                    <i class="bx bx-user me-2"></i>
+                    <span class="align-middle">Profil Saya</span>
+                </a>
                 <li>
                     <a class="dropdown-item" href="javascript:void(0);">
                         <i class="bx bx-cog me-2"></i>

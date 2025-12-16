@@ -9,10 +9,17 @@ use Exception;
 
 class JenisHewanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jenisHewan = JenisHewan::orderBy('idjenis_hewan', 'asc')->get();
-        return view('admin.jenis-hewan.index', compact('jenisHewan'));
+        $query = JenisHewan::query();
+
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $jenis = $query->orderBy('idjenis_hewan', 'asc')->get();
+
+        return view('admin.jenis-hewan.index', compact('jenis'));
     }
 
     public function create()
@@ -86,5 +93,11 @@ class JenisHewanController extends Controller
         $jenisHewan->delete();
 
         return redirect()->route('admin.jenis-hewan.index')->with('success', 'Jenis hewan berhasil dihapus!');
+    }
+
+    public function restore($id)
+    {
+        JenisHewan::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Data jenis hewan berhasil dipulihkan.');
     }
 }

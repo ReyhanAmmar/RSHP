@@ -11,8 +11,16 @@ use Exception;
 
 class KodeTindakanTerapiController extends Controller
 {
-    public function index() {
-        $tindakan = KodeTindakanTerapi::with(['kategori', 'kategoriKlinis'])->orderBy('idkode_tindakan_terapi', 'asc')->get();
+    public function index(Request $request)
+    {
+        $query = KodeTindakanTerapi::query();
+
+        if ($request->get('status') == 'non-aktif') {
+            $query->onlyTrashed();
+        }
+
+        $tindakan = $query->orderBy('idkode_tindakan_terapi', 'asc')->get();
+
         return view('admin.tindakan.index', compact('tindakan'));
     }
 
@@ -80,7 +88,7 @@ class KodeTindakanTerapiController extends Controller
 
     protected function createTindakan(array $data) {
         return KodeTindakanTerapi::create([
-            'kode' => $data['kode'], // Pakai kode otomatis
+            'kode' => $data['kode'],
             'deskripsi_tindakan_terapi' => $this->formatDeskripsi($data['deskripsi_tindakan_terapi']),
             'idkategori' => $data['idkategori'],
             'idkategori_klinis' => $data['idkategori_klinis']
@@ -89,5 +97,11 @@ class KodeTindakanTerapiController extends Controller
 
     protected function formatDeskripsi($nama) {
         return ucfirst(trim($nama));
+    }
+
+    public function restore($id)
+    {
+        KodeTindakanTerapi::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Data tindakan berhasil dipulihkan.');
     }
 }

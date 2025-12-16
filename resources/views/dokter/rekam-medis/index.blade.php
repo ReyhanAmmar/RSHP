@@ -1,40 +1,34 @@
 @extends('layouts.contentNavbarLayout')
 
-@section('title', 'Pemeriksaan Dokter')
+@section('title', 'Rekam Medis')
 
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Pemeriksaan /</span> Daftar Pasien
+        <span class="text-muted fw-light">Manajemen /</span> Rekam Medis
     </h4>
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Antrian Pemeriksaan Dokter</h5>
+            <h5 class="mb-0">Daftar Rekam Medis Pasien</h5>
+            <span class="badge bg-info">{{ count($rekamMedisList) }} Rekam</span>
         </div>
 
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th width="5%" class="text-center">No</th>
-                        <th>Tanggal</th>
                         <th>Nama Hewan</th>
                         <th>Pemilik</th>
-                        <th>Status</th>
+                        <th>Tanggal Pemeriksaan</th>
+                        <th>Diagnosa</th>
+                        <th class="text-center">Tindakan</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @forelse($antrian as $index => $item)
+                    @forelse($rekamMedisList as $item)
                     <tr>
-                        <td class="text-center">
-                            <span class="badge bg-label-primary rounded-circle p-2">{{ $item->no_urut }}</span>
-                        </td>
-                        <td>
-                            {{-- PERBAIKAN DI SINI: Gunakan waktu_daftar --}}
-                            {{ \Carbon\Carbon::parse($item->waktu_daftar)->format('d M Y') }}
-                        </td>
                         <td>
                             <strong>{{ $item->pet->nama }}</strong>
                             <div class="text-muted text-xs">{{ $item->pet->jenisHewan->nama_jenis_hewan ?? '-' }}</div>
@@ -43,21 +37,43 @@
                             {{ $item->pet->pemilik->user->nama ?? '-' }}
                         </td>
                         <td>
-                            @if($item->status == '1') 
-                                <span class="badge bg-label-warning">Menunggu Dokter</span>
-                            @elseif($item->status == '2')
-                                <span class="badge bg-label-success">Selesai</span>
-                            @else
-                                <span class="badge bg-label-secondary">Belum Siap</span>
+                            {{ $item->created_at->format('d-m-Y H:i') }}
+                        </td>
+                        <td>
+                            <small>{{ Str::limit($item->diagnosa, 40) }}</small>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-label-primary">{{ count($item->detailRekamMedis) }} Item</span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ route('dokter.rekam-medis.show', $item->idrekam_medis) }}" class="btn btn-sm btn-info">
+                                <i class="bx bx-show me-1"></i> Lihat
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <div class="text-muted mb-2"><i class="bx bx-inbox bx-lg"></i></div>
+                            Belum ada rekam medis.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endsection
                             @endif
                         </td>
                         <td class="text-center">
                             @if($item->status == '1')
-                                <a href="{{ route('dokter.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-success">
+                                <a href="{{ route('dokter.rekam-medis.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-success">
                                     <span class="bx bx-stethoscope me-1"></span> Periksa
                                 </a>
                             @elseif($item->status == '2')
-                                <a href="{{ route('dokter.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-outline-secondary">
+                                <a href="{{ route('dokter.rekam-medis.show', $item->idreservasi_dokter) }}" class="btn btn-sm btn-outline-secondary">
                                     <span class="bx bx-file me-1"></span> Detail
                                 </a>
                             @endif

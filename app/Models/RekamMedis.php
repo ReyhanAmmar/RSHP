@@ -2,13 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class RekamMedis extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'rekam_medis';
+
+    protected $primaryKey = 'idrekam_medis';
+
+    public $timestamps = true;
+
+    protected $guarded = [];
 
     protected static function boot()
     {
@@ -21,18 +30,10 @@ class RekamMedis extends Model
         });
     }
 
-    protected $table = 'rekam_medis';
-    protected $primaryKey = 'idrekam_medis';
-    public $timestamps = true;
-
-    protected $fillable = [
-        'idreservasi_dokter', // Pastikan kolom ini ada di fillable
-        'idpet',
-        'dokter_pemeriksa',
-        'anamnesa',
-        'temuan_klinis',
-        'diagnosa',
-    ];
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class, 'iddokter', 'iddokter');
+    }
 
     public function pet()
     {
@@ -42,10 +43,5 @@ class RekamMedis extends Model
     public function detailRekamMedis()
     {
         return $this->hasMany(DetailRekamMedis::class, 'idrekam_medis', 'idrekam_medis');
-    }
-
-    public function temuDokter()
-    {
-        return $this->belongsTo(TemuDokter::class, 'idreservasi_dokter', 'idreservasi_dokter');
     }
 }

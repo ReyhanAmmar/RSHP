@@ -76,4 +76,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Pemilik::class, 'iduser', 'iduser');
     }
+    public function dokter()
+    {
+        return $this->hasOne(Dokter::class, 'iduser', 'iduser');
+    }
+
+    public function perawat()
+    {
+        return $this->hasOne(Perawat::class, 'iduser', 'iduser');
+    }
+
 }

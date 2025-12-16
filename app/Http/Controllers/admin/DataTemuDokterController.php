@@ -14,12 +14,12 @@ class DataTemuDokterController extends Controller
         $status = $request->get('status', 'aktif');
         $query = TemuDokter::with(['pet.pemilik.user', 'dokter.user']); 
 
-        if ($status === 'non-aktif') {
+        if ($status === 'Non-Aktif') {
             $query->onlyTrashed();
         }
 
-        $data = $query->orderBy('waktu_daftar', 'desc')->get();
-        return view('admin.temu-dokter.index', compact('data', 'status'));
+        $data = $query->orderBy('waktu_daftar', 'asc')->get();
+        return view('admin.data-temu-dokter.index', compact('data', 'status'));
     }
 
     public function destroy($id)
@@ -32,6 +32,6 @@ class DataTemuDokterController extends Controller
     public function restore($id)
     {
         TemuDokter::onlyTrashed()->findOrFail($id)->restore();
-        return redirect()->back()->with('success', 'Reservasi dikembalikan.');
+        return redirect()->back()->with('success', 'Data berhasil dipulihkan.');
     }
 }

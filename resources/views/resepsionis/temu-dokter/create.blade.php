@@ -33,7 +33,9 @@
                                 <select class="form-select" id="selectOwner">
                                     <option value="">-- Cari Pemilik --</option>
                                     @foreach($pemilik as $p)
-                                        <option value="{{ $p->idpemilik }}">{{ $p->user->nama }} ({{ $p->no_wa }})</option>
+                                        @if($p->user)
+                                            <option value="{{ $p->idpemilik }}">{{ $p->user->nama }} ({{ $p->no_wa }})</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -61,7 +63,9 @@
                                 <select class="form-select" name="idrole_user" id="idrole_user" required>
                                     <option value="">-- Pilih Dokter --</option>
                                     @foreach($dokter as $d)
-                                        <option value="{{ $d->idrole_user }}">drh. {{ $d->user->nama }}</option>
+                                        @if($d->user)
+                                            <option value="{{ $d->idrole_user }}">drh. {{ $d->user->nama }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>

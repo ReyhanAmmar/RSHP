@@ -55,8 +55,8 @@ class RegistrasiPemilikController extends Controller
             ]);
         });
 
-        return redirect()->route('resepsionis.registrasi-pemilik.create')
-                         ->with('success', 'Pemilik berhasil didaftarkan! Silakan lanjut ke menu Registrasi Hewan.');
+        return redirect()->route('resepsionis.registrasi-pemilik.index')
+                         ->with('success', 'Pemilik berhasil didaftarkan!');
     }
 
     public function edit($id)

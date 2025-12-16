@@ -17,27 +17,19 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Berat Badan (Kg)</label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text"><i class="bx bx-dumbbell"></i></span>
-                                    <input type="number" step="0.01" class="form-control" name="berat_badan" value="{{ $rekamMedis->berat_badan }}" required />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Suhu Tubuh (°C)</label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text"><i class="bx bxs-thermometer"></i></span>
-                                    <input type="number" step="0.1" class="form-control" name="suhu_tubuh" value="{{ $rekamMedis->suhu_tubuh }}" required />
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Anamnesa (Riwayat Keluhan) <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="anamnesa" rows="3" required>{{ $rekamMedis->anamnesa }}</textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Anamnesa</label>
-                            <textarea class="form-control" name="keluhan" rows="3" required>{{ $rekamMedis->keluhan }}</textarea>
+                            <label class="form-label">Temuan Klinis</label>
+                            <textarea class="form-control" name="temuan_klinis" rows="3">{{ $rekamMedis->temuan_klinis }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Diagnosa <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="diagnosa" rows="3" required>{{ $rekamMedis->diagnosa }}</textarea>
                         </div>
 
                         <div class="text-end">

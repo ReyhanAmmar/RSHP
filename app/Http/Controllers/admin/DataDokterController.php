@@ -13,20 +13,19 @@ use Illuminate\Support\Facades\DB;
 class DataDokterController extends Controller
 {
     public function index(Request $request)
-    {
-        $status = $request->get('status', 'aktif');
+{
+    $query = Dokter::with(['user' => function ($q) {
+        $q->withTrashed(); 
+    }]);
 
-        $query = Dokter::with('user');
-
-        if ($status === 'non-aktif') {
-            $query->onlyTrashed();
-        } else {
-        }
-
-        $dokters = $query->get();
-
-        return view('admin.data-dokter.index', compact('dokters', 'status'));
+    if ($request->get('status') == 'Non-Aktif') {
+        $query->onlyTrashed();
     }
+
+    $dokters = $query->orderBy('id_dokter', 'asc')->get();
+
+    return view('admin.data-dokter.index', compact('dokters'));
+}
 
     public function create()
     {
@@ -46,21 +45,26 @@ class DataDokterController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
-            $user = User::create([
-                'nama' => $request->nama,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+        $user = User::create([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
-            RoleUser::create(['iduser' => $user->iduser, 'idrole' => 2, 'status' => 1]);
+        if (!$user->iduser) {
+            dd("GAGAL: User dibuat tapi tidak punya ID. Cek Primary Key di Model User.");
+        }
 
-            Dokter::create([
-                'iduser' => $user->iduser,
-                'no_hp' => $request->no_hp,
-                'alamat' => $request->alamat,
-                'bidang_dokter' => $request->bidang_dokter,
-                'jenis_kelamin' => $request->jenis_kelamin
-            ]);
+        RoleUser::create(['iduser' => $user->iduser, 'idrole' => 2, 'status' => 1]);
+
+        $dokter = Dokter::create([
+            'iduser' => $user->iduser,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat,
+            'bidang_dokter' => $request->bidang_dokter,
+            'jenis_kelamin' => $request->jenis_kelamin
+        ]);
+        
         });
 
         return redirect()->route('admin.data-dokter.index')->with('success', 'Dokter berhasil ditambahkan.');
@@ -114,11 +118,17 @@ class DataDokterController extends Controller
 
     public function restore($id)
     {
-        $dokter = Dokter::onlyTrashed()->findOrFail($id);
+        $dokter = Dokter::withTrashed()->findOrFail($id);
         
         $dokter->restore();
 
-        return redirect()->route('admin.data-dokter.index', ['status' => 'non-aktif'])
-            ->with('success', 'Data Dokter berhasil diaktifkan kembali.');
+        if ($dokter->iduser) {
+            $user = User::withTrashed()->find($dokter->iduser);
+            if ($user) {
+                $user->restore();
+            }
+        }
+
+        return back()->with('success', 'Data dokter berhasil dipulihkan.');
     }
 }

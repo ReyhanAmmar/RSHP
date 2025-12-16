@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['roleuser.role'])->get(); 
+        $query = User::with(['roleUser.role']);
+
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $users = $query->orderBy('iduser', 'asc')->get();
+
         return view('admin.data-user.index', compact('users'));
     }
 
@@ -105,5 +112,13 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.data-user.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+
+        return back()->with('success', 'User berhasil dipulihkan.');
     }
 }

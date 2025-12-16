@@ -24,7 +24,7 @@ class TemuDokterController extends Controller
 
     public function create()
     {
-        $pets = Pet::all();
+        $pets = Pet::with(['pemilik', 'jenisHewan', 'rasHewan'])->get();
         $pemilik = Pemilik::with('user')->get(); 
         
         $dokter = RoleUser::whereHas('role', function ($q) {

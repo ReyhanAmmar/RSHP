@@ -12,9 +12,18 @@ use Illuminate\Support\Facades\DB;
 
 class PemilikController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pemilik = Pemilik::with('user')->orderBy('idpemilik', 'desc')->get();
+        $query = Pemilik::with(['user' => function ($q) {
+            $q->withTrashed();
+        }]);
+
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $pemilik = $query->orderBy('idpemilik', 'asc')->get();
+
         return view('admin.data-pemilik.index', compact('pemilik'));
     }
 
@@ -103,5 +112,22 @@ class PemilikController extends Controller
         }
 
         return redirect()->route('admin.data-pemilik.index')->with('success', 'Pemilik berhasil dihapus.');
+    }
+
+    public function restore($id)
+    {
+        $pemilik = Pemilik::withTrashed()->findOrFail($id);
+        
+        $pemilik->restore();
+
+        if ($pemilik->iduser) {
+            $user = User::withTrashed()->find($pemilik->iduser);
+            
+            if ($user) {
+                $user->restore();
+            }
+        }
+        
+        return back()->with('success', 'Data pemilik & akun user berhasil dipulihkan.');
     }
 }

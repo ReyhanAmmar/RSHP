@@ -13,18 +13,18 @@ class DataRekamMedisController extends Controller
         $status = $request->get('status', 'aktif');
         $query = RekamMedis::with(['pet', 'dokter.user']);
 
-        if ($status === 'non-aktif') {
+        if ($status === 'Non-Aktif') {
             $query->onlyTrashed();
         }
 
         $data = $query->latest()->get();
-        return view('admin.rekam-medis.index', compact('data', 'status'));
+        return view('admin.data-rekam-medis.index', compact('data', 'status'));
     }
 
     public function show($id)
     {
         $rekamMedis = RekamMedis::with(['detailRekamMedis.tindakan'])->findOrFail($id);
-        return view('admin.rekam-medis.show', compact('rekamMedis'));
+        return view('admin.data-rekam-medis.show', compact('rekamMedis'));
     }
 
     public function destroy($id)
@@ -37,6 +37,6 @@ class DataRekamMedisController extends Controller
     public function restore($id)
     {
         RekamMedis::onlyTrashed()->findOrFail($id)->restore();
-        return redirect()->back()->with('success', 'Rekam medis dikembalikan.');
+        return redirect()->back()->with('success', 'Data rekam medis berhasil dipulihkan.');
     }
 }

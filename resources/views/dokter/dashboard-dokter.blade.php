@@ -15,7 +15,7 @@
                             <p class="mb-4">
                                 Semoga hari Anda menyenangkan. Silakan cek daftar antrian pasien untuk memulai pemeriksaan medis hari ini.
                             </p>
-                            <a href="{{ route('dokter.index') }}" class="btn btn-sm btn-outline-success">Mulai Pemeriksaan</a>
+                            <a href="{{ route('dokter.rekam-medis.index') }}" class="btn btn-sm btn-outline-success">Mulai Pemeriksaan</a>
                         </div>
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
@@ -39,7 +39,7 @@
                             <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                            <a class="dropdown-item" href="{{ route('dokter.index') }}">Lihat Semua</a>
+                            <a class="dropdown-item" href="{{ route('dokter.rekam-medis.index') }}">Lihat Semua</a>
                         </div>
                     </div>
                 </div>

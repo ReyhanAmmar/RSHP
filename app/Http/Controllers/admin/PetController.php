@@ -11,13 +11,21 @@ use App\Models\RasHewan;
 
 class PetController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pets = Pet::with(['pemilik.user', 'rasHewan.jenisHewan'])
-                   ->orderBy('idpet', 'desc')
-                   ->get();
+        $query = Pet::with([
+            'pemilik.user' => function($q) { $q->withTrashed(); },
+            'rasHewan' => function($q) { $q->withTrashed(); },
+            'jenisHewan' => function($q) { $q->withTrashed(); },
+        ]);
 
-        return view('admin.data-pet.index', compact('pets'));
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $pet = $query->orderBy('idpet', 'asc')->get(); // Sesuaikan primary key 'idpet'
+
+        return view('admin.data-pet.index', compact('pet'));
     }
 
     public function create()
@@ -97,5 +105,11 @@ class PetController extends Controller
         $pet->delete();
 
         return redirect()->route('admin.data-pet.index')->with('success', 'Data Hewan berhasil dihapus.');
+    }
+
+    public function restore($id)
+    {
+        Pet::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Data hewan peliharaan berhasil dipulihkan.');
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Site\SiteController;
 use App\Http\Controllers\Site\ServController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Perawat\DataPasienController;
 
 use App\Http\Controllers\Dokter\DashboardDokterController;
 use App\Http\Controllers\Dokter\DokterController;
+use App\Http\Controllers\Dokter\DataPasienController as DokterDataPasienController;
 
 use App\Http\Controllers\Pemilik\DashboardPemilikController;
 
@@ -45,6 +47,11 @@ Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('cek.kon
 
 Auth::routes();
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function() {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 
 Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(function () {
@@ -160,13 +167,13 @@ Route::middleware('isAdministrator')->prefix('admin')->name('admin.')->group(fun
         Route::get('/{id}/restore', [DataPerawatController::class, 'restore'])->name('restore');
     });
 
-    Route::prefix('temu-dokter')->name('temu-dokter.')->group(function() {
+    Route::prefix('data-temu-dokter')->name('data-temu-dokter.')->group(function() {
         Route::get('/', [DataTemuDokterController::class, 'index'])->name('index');
         Route::delete('/{id}', [DataTemuDokterController::class, 'destroy'])->name('destroy');
         Route::get('/{id}/restore', [DataTemuDokterController::class, 'restore'])->name('restore');
     });
 
-    Route::prefix('rekam-medis')->name('rekam-medis.')->group(function() {
+    Route::prefix('data-rekam-medis')->name('data-rekam-medis.')->group(function() {
         Route::get('/', [DataRekamMedisController::class, 'index'])->name('index');
         Route::get('/{id}', [DataRekamMedisController::class, 'show'])->name('show');
         Route::delete('/{id}', [DataRekamMedisController::class, 'destroy'])->name('destroy');
@@ -220,19 +227,33 @@ Route::middleware('isPerawat')->prefix('perawat')->name('perawat.')->group(funct
         Route::get('/', [RekamMedisController::class, 'index'])->name('index');
         Route::get('/create/{idreservasi}', [RekamMedisController::class, 'create'])->name('create');
         Route::post('/store', [RekamMedisController::class, 'store'])->name('store');
+        Route::get('/{id}', [RekamMedisController::class, 'show'])->name('show');
+        Route::get('/{id}/tindakan', [RekamMedisController::class, 'tindakan'])->name('tindakan');
         Route::get('/{id}/edit', [RekamMedisController::class, 'edit'])->name('edit');
         Route::put('/{id}', [RekamMedisController::class, 'update'])->name('update');
         Route::delete('/{id}', [RekamMedisController::class, 'destroy'])->name('destroy');
         Route::get('/{id}/restore', [RekamMedisController::class, 'restore'])->name('restore');
+        
+        Route::post('/{id}/detail', [RekamMedisController::class, 'storeDetail'])->name('store-detail');
+        Route::delete('/detail/{id_detail}', [RekamMedisController::class, 'destroyDetail'])->name('destroy-detail');
     });
 });
 
 Route::middleware('isDokter')->prefix('dokter')->name('dokter.')->group(function () {
-    Route::get('/dashboard', [DashboardDokterController::class, 'index'])->name('dashboard');
+    Route::get('/dokter.dashboard-dokter', [DashboardDokterController::class, 'index'])->name('dashboard');
+    
+    Route::prefix('data-pasien')->name('data-pasien.')->group(function() {
+        Route::get('/', [DokterDataPasienController::class, 'index'])->name('index');
+        Route::get('/{id}', [DokterDataPasienController::class, 'show'])->name('show');
+    });
     
     Route::prefix('rekam-medis')->name('rekam-medis.')->group(function() {
         Route::get('/', [DokterController::class, 'index'])->name('index');
+        Route::get('/create/{idreservasi}', [DokterController::class, 'create'])->name('create');
+        Route::post('/store', [DokterController::class, 'store'])->name('store');
         Route::get('/{id}', [DokterController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [DokterController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [DokterController::class, 'update'])->name('update');
         
         Route::post('/{id}/detail', [DokterController::class, 'storeDetail'])->name('store-detail');
         Route::delete('/detail/{id_detail}', [DokterController::class, 'destroyDetail'])->name('destroy-detail');

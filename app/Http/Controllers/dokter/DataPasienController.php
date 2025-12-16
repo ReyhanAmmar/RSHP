@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\perawat;
+namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
@@ -20,15 +20,15 @@ class DataPasienController extends Controller
 
         $pets = $query->latest('idpet')->get();
 
-        return view('perawat.data-pasien.index', compact('pets', 'status'));
+        return view('dokter.data-pasien.index', compact('pets', 'status'));
     }
 
     public function show($id)
     {
         $pet = Pet::withTrashed()
-                ->with(['pemilik.user', 'rasHewan', 'rekamMedis.dokter.user'])
+                ->with(['pemilik.user', 'rasHewan', 'rekamMedis.dokter.user', 'jenisHewan'])
                 ->findOrFail($id);
 
-        return view('perawat.data-pasien.show', compact('pet'));
+        return view('dokter.data-pasien.show', compact('pet'));
     }
 }

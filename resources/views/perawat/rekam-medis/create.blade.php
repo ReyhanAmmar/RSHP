@@ -50,33 +50,30 @@
                 <div class="card-body">
                     <form action="{{ route('perawat.rekam-medis.store') }}" method="POST">
                         @csrf
-                        {{-- Hidden ID Reservasi & ID Hewan --}}
                         <input type="hidden" name="idreservasi_dokter" value="{{ $reservasi->idreservasi_dokter }}">
                         <input type="hidden" name="idpet" value="{{ $reservasi->idpet }}">
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="berat_badan">Berat Badan (Kg)</label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text"><i class="bx bx-dumbbell"></i></span>
-                                    <input type="number" step="0.01" class="form-control" id="berat_badan" name="berat_badan" placeholder="0.00" required />
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="suhu_tubuh">Suhu Tubuh (°C)</label>
-                                <div class="input-group input-group-merge">
-                                    <span class="input-group-text"><i class="bx bxs-thermometer"></i></span>
-                                    <input type="number" step="0.1" class="form-control" id="suhu_tubuh" name="suhu_tubuh" placeholder="36.5" required />
-                                </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="anamnesa">Anamnesa (Riwayat Keluhan) <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="bx bx-notepad"></i></span>
+                                <textarea class="form-control" id="anamnesa" name="anamnesa" rows="3" placeholder="Jelaskan kondisi hewan saat datang, keluhan pemilik, dan riwayat kesehatan..." required></textarea>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="keluhan">Anamnesa / Keluhan Awal</label>
+                            <label class="form-label" for="temuan_klinis">Temuan Klinis</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text"><i class="bx bx-notepad"></i></span>
-                                <textarea class="form-control" id="keluhan" name="keluhan" rows="3" placeholder="Jelaskan kondisi hewan saat datang..." required></textarea>
+                                <span class="input-group-text"><i class="bx bx-pulse"></i></span>
+                                <textarea class="form-control" id="temuan_klinis" name="temuan_klinis" rows="3" placeholder="Hasil pemeriksaan fisik dan klinis yang ditemukan..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="diagnosa">Diagnosa <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="bx bx-stethoscope"></i></span>
+                                <textarea class="form-control" id="diagnosa" name="diagnosa" rows="3" placeholder="Diagnosa penyakit atau kondisi yang teridentifikasi..." required></textarea>
                             </div>
                         </div>
 

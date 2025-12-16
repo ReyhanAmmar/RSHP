@@ -9,10 +9,18 @@ use Exception;
 
 class KategoriController extends Controller
 {
-    public function index() {
-        $kategori = Kategori::all();
+    public function index(Request $request)
+    {
+        $query = Kategori::query();
+
+        if ($request->get('status') == 'non-aktif') {
+            $query->onlyTrashed();
+        }
+
+        $kategori = $query->orderBy('idkategori', 'asc')->get();
+
         return view('admin.kategori.index', compact('kategori'));
-    }
+}
 
     public function create() {
         return view('admin.kategori.create');
@@ -67,5 +75,11 @@ class KategoriController extends Controller
 
     protected function formatNama($nama) {
         return trim(ucwords(strtolower($nama)));
+    }
+
+        public function restore($id)
+    {
+        Kategori::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Kategori berhasil dipulihkan.');
     }
 }

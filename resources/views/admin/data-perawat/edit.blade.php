@@ -11,8 +11,8 @@
             
             <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">Info Akun</h6>
             <div class="row">
-                <div class="col-md-6"><div class="form-group"><label class="form-control-label">Nama Lengkap</label><input class="form-control" type="text" name="nama" value="{{ $perawat->user->nama }}" required></div></div>
-                <div class="col-md-6"><div class="form-group"><label class="form-control-label">Email</label><input class="form-control" type="email" name="email" value="{{ $perawat->user->email }}" required></div></div>
+                <div class="col-md-6"><div class="form-group"><label class="form-control-label">Nama Lengkap</label><input class="form-control" type="text" name="nama" value="{{ $perawat->user->nama ?? ''}}" required></div></div>
+                <div class="col-md-6"><div class="form-group"><label class="form-control-label">Email</label><input class="form-control" type="email" name="email" value="{{ $perawat->user->email ?? ''}}" required></div></div>
                 <div class="col-md-12"><div class="form-group"><label class="form-control-label">Password Baru (Opsional)</label><input class="form-control" type="password" name="password"></div></div>
             </div>
             <hr class="horizontal dark">

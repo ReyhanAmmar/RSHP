@@ -23,9 +23,11 @@
                                 <select class="form-select" id="idpemilik" name="idpemilik" required>
                                     <option value="">-- Pilih Pemilik --</option>
                                     @foreach($pemilik as $p)
-                                        <option value="{{ $p->idpemilik }}" {{ old('idpemilik') == $p->idpemilik ? 'selected' : '' }}>
-                                            {{ $p->user->nama }} ({{ $p->alamat }})
-                                        </option>
+                                        @if($p->user)
+                                            <option value="{{ $p->idpemilik }}" {{ old('idpemilik') == $p->idpemilik ? 'selected' : '' }}>
+                                                {{ $p->user->nama }} ({{ $p->alamat }})
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -47,8 +49,8 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
                                 <select class="form-select" name="jenis_kelamin" required>
-                                    <option value="Jantan">Jantan</option>
-                                    <option value="Betina">Betina</option>
+                                    <option value="J">Jantan</option>
+                                    <option value="B">Betina</option>
                                 </select>
                             </div>
                         </div>
@@ -79,8 +81,8 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="warna">Warna / Ciri Khas</label>
-                                <input type="text" class="form-control" id="warna" name="warna" placeholder="Cth: Belang Tiga" required />
+                                <label class="form-label" for="warna_tanda">Warna / Ciri Khas</label>
+                                <input type="text" class="form-control" id="warna_tanda" name="warna_tanda" placeholder="Cth: Belang Tiga" required />
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label" for="tanggal_lahir">Tanggal Lahir (Estimasi)</label>

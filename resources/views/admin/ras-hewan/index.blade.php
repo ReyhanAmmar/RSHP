@@ -1,58 +1,58 @@
 @extends('layouts.contentNavbarLayout')
-
-@section('title', 'Data Ras Hewan')
-
+@section('title', 'Ras Hewan')
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Master Data /</span> Ras Hewan</h4>
 
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Daftar Ras Hewan</h5>
-            <a href="{{ route('admin.ras-hewan.create') }}" class="btn btn-primary">
-                <span class="tf-icons bx bx-plus"></span> Tambah Ras
-            </a>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Daftar Ras Hewan</h5>
+        <div class="d-flex gap-2">
+            <form action="{{ url()->current() }}" method="GET">
+                <select name="status" class="form-select" onchange="this.form.submit()" style="width: 200px; cursor: pointer;">
+                    <option value="aktif" {{ request('status') != 'Non-Aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="Non-Aktif" {{ request('status') == 'Non-Aktif' ? 'selected' : '' }}>Non-Aktif</option>
+                </select>
+            </form>
+            @if(request('status') != 'Non-Aktif')
+                <a href="{{ route('admin.ras-hewan.create') }}" class="btn btn-primary"><span class="bx bx-plus me-1"></span> Tambah</a>
+            @endif
         </div>
+    </div>
 
-        <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Ras</th>
-                        <th>Jenis Hewan</th>
-                        <th width="200">Aksi</th> </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                    @forelse ($ras_hewan as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td><strong>{{ $item->nama_ras }}</strong></td>
-                        <td>
-                            <span class="badge bg-label-info">
-                                {{ $item->jenisHewan->nama_jenis_hewan ?? 'Tidak Diketahui' }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.ras-hewan.edit', ['id' => $item->idras_hewan]) }}" class="text-secondary font-weight-bold text-xs me-3">
-                                Edit
-                            </a>
-
-                            <form action="{{ route('admin.ras-hewan.destroy', ['id' => $item->idras_hewan]) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-danger font-weight-bold text-xs border-0 bg-transparent p-0">Hapus</button>
+    <div class="table-responsive text-nowrap">
+        <table class="table align-items-center mb-0">
+            <thead>
+                <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Nama Ras</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Jenis Hewan</th>
+                    <th class="text-secondary opacity-7"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($ras as $item)
+                <tr>
+                    <td>
+                        <div class="px-3"><span class="fw-bold text-sm">{{ $item->nama_ras }}</span></div>
+                    </td>
+                    <td>
+                        <span class="badge bg-label-info">{{ $item->jenisHewan->nama_jenis_hewan ?? 'Jenis Terhapus' }}</span>
+                    </td>
+                    <td class="align-middle text-end pe-4">
+                        @if(request('status') == 'Non-Aktif')
+                            <a href="{{ route('admin.ras-hewan.restore', $item->getKey()) }}" class="text-success fw-bold text-xs me-3" onclick="return confirm('Restore?')">Restore</a>
+                        @else
+                            <a href="{{ route('admin.ras-hewan.edit', $item->getKey()) }}" class="text-secondary fw-bold text-xs me-3">Edit</a>
+                            <form action="{{ route('admin.ras-hewan.destroy', $item->getKey()) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus?')">
+                                @csrf @method('DELETE')
+                                <button class="text-danger fw-bold text-xs border-0 bg-transparent p-0">Hapus</button>
                             </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="text-center">Data tidak ditemukan.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                        @endif
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="3" class="text-center py-4 text-xs">Tidak ada data.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection

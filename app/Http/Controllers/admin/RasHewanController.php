@@ -10,11 +10,20 @@ use Exception;
 
 class RasHewanController extends Controller
 {
-public function index() {
-    $ras_hewan = RasHewan::with('jenisHewan')->get();
-    
-    return view('admin.ras-hewan.index', compact('ras_hewan'));
-}
+    public function index(Request $request)
+    {
+        $query = RasHewan::with(['jenisHewan' => function($q){
+            $q->withTrashed();
+        }]);
+
+        if ($request->get('status') == 'Non-Aktif') {
+            $query->onlyTrashed();
+        }
+
+        $ras = $query->orderBy('idras_hewan', 'asc')->get();
+        
+        return view('admin.ras-hewan.index', compact('ras'));
+    }
 
     public function create() {
         $jenisHewan = JenisHewan::all();
@@ -74,5 +83,11 @@ public function index() {
 
     protected function formatNama($nama) {
         return trim(ucwords(strtolower($nama)));
+    }
+
+    public function restore($id)
+    {
+        RasHewan::withTrashed()->findOrFail($id)->restore();
+        return back()->with('success', 'Data ras hewan berhasil dipulihkan.');
     }
 }
